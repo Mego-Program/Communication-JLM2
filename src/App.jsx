@@ -1,50 +1,11 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-// function App() {
-//   const [count, setCount] = useState(0)
+function App() {
+  const [count, setCount] = useState(0)
 
-//   return (
-//     <>
-//      <div></div>
-//     </>
-//   )
-// }
-
-// export default App
-
-
-
-import './app.css';
-import io from 'socket.io-client';
-import {useEffect, useState} from "react";
-
-const socket = io.connect("http://localhost:3001")
-
-export function App() {
-
-  const [room, setRoom] = useState("");
-
-  const [message, setMessage] = useState ("");
-  const [messageReceived, setMassageReceived] = useState("");
-
-  const joinRoom = () => {
-    if(room !=="") {
-      socket.emit("join_room", room);
-    }
-  };
-
-  const sendMessage = () => {
-  socket.emit("send_message", { message , room });
- };
-
- useEffect(() => {
-  socket.on("receive_message", (data) => {
-    setMassageReceived(data.message);
-  });
-},[socket]);
   return (
     <div className='App'>
       <input 
@@ -68,6 +29,4 @@ export function App() {
     </div>
   );
 }
-
-export default App
 
