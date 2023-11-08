@@ -23,7 +23,7 @@ import {useEffect, useState} from "react";
 
 const socket = io.connect("http://localhost:3001")
 
-export function App() {
+export default  function App() {
 
   const [room, setRoom] = useState("");
 
@@ -69,5 +69,5 @@ export function App() {
   );
 }
 
-export default App
+
 
