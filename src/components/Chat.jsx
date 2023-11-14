@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { Button, Container } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-
+import Message from './Message';
 export default function Chat() {
   return (<div>
             <Box sx={{ flexGrow: 1,height:'90vh'}}>
@@ -16,7 +16,8 @@ export default function Chat() {
                             <Box  sx={{ bgcolor: '#AAAAAA', height: '10vh' }}>
                             </Box>
 
-                            <Box  sx={{ bgcolor: '#BBBBBB', height: '60vh' }}>
+                            <Box id="boardMesseages" sx={{ bgcolor: '#BBBBBB', height: '60vh' }}>
+                                <Message/>
                             </Box>
 
                             <Box  sx={{ bgcolor: '#CCCCCC', height: '20vh' }}>
