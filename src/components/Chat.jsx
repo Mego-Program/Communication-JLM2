@@ -1,13 +1,15 @@
 import io from 'socket.io-client';
 import {useEffect, useState} from "react";
 import  Button from "@mui/material/Button";
-import { Container, Input } from '@mui/material';
+import { Container, Input, TextField } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import Box from "@mui/material/Box";
 import { Send } from '@mui/icons-material';
-//import Input from '@mui/material';
+import theme from '../theme';
+
 
 const socket = io.connect("http://localhost:3001")
+const ariaLabel = { 'aria-label': 'description' };
 
 export default function Chat() {
     const [room, setRomm] = useState('')//  צריך לקבל את רשימת החדרים הקיימת מהשרת
@@ -43,22 +45,22 @@ export default function Chat() {
   },[socket]);
 
   return (<div>
-            <Box sx={{ flexGrow: 1,height:'90vh'}}>
+            <Box flexGrow= {1} height={'90vh'}>
                 <Container >
                     <Grid2 container spacing={0.2}>
-                        <Grid2 xs={3}>
-                            <Box sx={{ bgcolor: '#DDDDDD', height: '90vh' }}>
-                                <Button onClick={joinRoom}>join room</Button>
-                                <input
+                        <Grid2 xs={2}>
+                            <Box bgcolor= {theme.palette.chat.main} height= {'90vh'}>
+                                <Button bgcolor={theme.palette.white.main} onClick={joinRoom}>join room</Button>
+                                <TextField
                                     type="text"
                                     name='room number'
                                     placeholder = "room number"
                                     onChange={(Event) => {
                                         setRomm(Event.target.value)
-                                    }}
+                                    }} 
+
                                     onKeyDown={(Event)=>{if(Event.key==="Enter"){joinRoom(Event)}}}
-                                >
-                                </input>
+                                />
                                  <Box>
                                    {roomList}
                                 </Box>
@@ -66,18 +68,17 @@ export default function Chat() {
                         </Grid2>
 
                         <Grid2 xs={9}>
-                            <Box  sx={{ bgcolor: '#AAAAAA', height: '10vh' }}>User
+                            <Box color={theme.palette.primary.main} bgcolor={ theme.palette.chat.navBar} height= {'10vh'} >User
                             </Box>
 
-                            <Box  sx={{ bgcolor: '#BBBBBB', height: '60vh' }}>
+                            <Box bgcolor= {theme.palette.chat.main} height= {'60vh' }>
                                 {messageReceived}                                
                             </Box>
 
-                            <Box  sx={{ bgcolor: '#CCCCCC', height: '20vh' }}>
-                                <input id='message' name= 'message' onChange={(Event) => {
+                            <Box bgcolor={ theme.palette.chat.navBar} height= {'20vh' }>
+                                <Input fullWidth placeholder="messege" inputProps={ariaLabel} onChange={(Event) => {
                                     setMessage(Event.target.value)
-
-                                }}/>
+                                    }} startIcon={<Send/>} />
                                 <Button onClick={sendMessage} endIcon={<Send/>} >Send</Button>
                             </Box>
                         </Grid2>
