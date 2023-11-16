@@ -5,7 +5,7 @@ import './index.css'
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import theme from './components/theme.js';
-import Chat from './components/Chat.jsx';
+
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
