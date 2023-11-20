@@ -13,10 +13,9 @@ const ariaLabel = { 'aria-label': 'description' };
 let messageList = ''
 
 export default function Chat() {
-    const [room, setRomm] = useState('')//  צריך לקבל את רשימת החדרים הקיימת מהשרת
-    //צריך לקבל את רשימת המשתתפים בחדר
-    const [message, setMessage] = useState ("");//בכל שינוי בתיבת טקסט נשמר המידע במשתנה 
-    const [messageReceived, setMessageReceived] = useState("");// ברגע שנלחץ על סנד המידע יועבר למשתנה מסג'רסיבד
+    const [room, setRomm] = useState('') 
+    const [message, setMessage] = useState ("");
+    const [messageReceived, setMessageReceived] = useState("");
     const [roomList, setRoomList] = useState([<Button>{"Main Room"}</Button>])
 
     
