@@ -13,7 +13,7 @@ const ariaLabel = { 'aria-label': 'description' };
 let messageList = ''
 
 export default function Chat() {
-    const [room, setRomm] = useState('')
+    const [room, setRomm] = useState('') 
     const [message, setMessage] = useState ("");
     const [messageReceived, setMessageReceived] = useState("");
     const [roomList, setRoomList] = useState([<Button>{"Main Room"}</Button>])
