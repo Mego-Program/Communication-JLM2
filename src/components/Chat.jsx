@@ -1,22 +1,19 @@
 import io from 'socket.io-client';
 import {useEffect, useState} from "react";
 import  Button from "@mui/material/Button";
-import { Container, Input, TextField } from '@mui/material';
+import { Container, Input, TextField,Box } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
-import Box from "@mui/material/Box";
-import { Send } from '@mui/icons-material';
 import theme from './theme';
+import ChatBody from './chat-body';
 
-
+//const socket = io.connect("https://jlm-com-server-2.onrender.com/")
 const socket = io.connect("http://localhost:3001")
 const ariaLabel = { 'aria-label': 'description' };
-let messageList = ''
+//let userList = [1,2,3,4,5]
 
 export default function Chat() {
-    const [room, setRomm] = useState('')//  צריך לקבל את רשימת החדרים הקיימת מהשרת
-    //צריך לקבל את רשימת המשתתפים בחדר
-    const [message, setMessage] = useState ("");//בכל שינוי בתיבת טקסט נשמר המידע במשתנה 
-    const [messageReceived, setMessageReceived] = useState("");// ברגע שנלחץ על סנד המידע יועבר למשתנה מסג'רסיבד
+    const [room, setRoom] = useState('')
+    const [username, setUsername] = useState('')
     const [roomList, setRoomList] = useState([<Button>{"Main Room"}</Button>])
 
     
@@ -25,32 +22,22 @@ export default function Chat() {
             socket.emit("join_room", room)
             setRoomList([...roomList,<Button>{room}</Button>])
             console.log(room)
-            Event.target.value =""
-            
-        }
+            Event.target.value =""        }
         else{
             console.log("name room is empty")
         }
     };
 
-    const sendMessage = () => {
-        console.log(message)
-        socket.emit("send_message",  {message,room});
-
-    };
-  
-   useEffect(() => {
-        socket.on("receive_message",(message) => {
-        setMessageReceived(message);
-    });
-  },[socket]);
 
   return (<div>
             <Box bgcolor={theme.palette.chat.main} flexGrow= {1} height={'100vh'}>
                 <Container >
                     <Grid2 container spacing={1}>
                         <Grid2 xs={2}>
-                            <Box marginTop={'25px'} border= {"2px #F6C927 dotted"} borderRadius={'7px'} bgcolor= {theme.palette.chat.navBar} height= {'90vh'}>
+                        <Input sx={{input: { color: '#ffffff' }, borderRadius:"7px", margin:'20px 0px 7px', width: "100%" , border: "2px #Ffffff solid",bgcolor: "#21213E"}} placeholder="user name" inputProps={ariaLabel}
+                                onKeyDown={(Event)=>{if(Event.key==="Enter"){setUsername(Event.target.value)}}}
+                                />
+                            <Box marginTop={'2px'} border= {"2px #F6C927 dotted"} borderRadius={'7px'} bgcolor= {theme.palette.chat.navBar} height= {'85vh'}>
                                 <Button bgcolor={theme.palette.white.main} onClick={joinRoom}>join room</Button>
                                 <TextField
                                 sx={{ input: { color: '#ffffff' } }}
@@ -58,7 +45,7 @@ export default function Chat() {
                                     name='room number'
                                     placeholder = "room number"
                                     onChange={(Event) => {
-                                        setRomm(Event.target.value)
+                                        setRoom(Event.target.value)
                                     }} 
 
                                     onKeyDown={(Event)=>{if(Event.key==="Enter"){joinRoom(Event)}}}
@@ -69,22 +56,10 @@ export default function Chat() {
                             </Box>
                         </Grid2>
 
-                        <Grid2 marginTop={"13px"}xs={10}>
-                            <Box border= {"2px #F6C927 solid"} borderRadius={'7px'} margin={'7px'} color={theme.palette.primary.main} bgcolor={ theme.palette.chat.navBar} height= {'10vh'} >User
-                            </Box>
-
-                            <Box sx={{color: "#ffffff"}}border= {"2px #F6C927 solid"} borderRadius={'7px'} margin={'7px'} bgcolor= {theme.palette.white} height= {'60vh' }>
-                                {messageReceived}                                
-                            </Box>
-
-                            <Box border= {"2px #F6C927 solid"} borderRadius={'7px'} margin={'7px'} bgcolor={ theme.palette.chat.navBar} height= {'20vh' }>
-                                <Input sx={{ input: { color: '#ffffff' }, borderRadius:"7px" ,margin: '5px' , width: "98%" , border: "2px #Ffffff dotted"}} placeholder="messege" inputProps={ariaLabel} onChange={(Event) => {
-                                    setMessage(Event.target.value)
-                                    }}/>
-                                    <Button sx={{color: '#ffffff'}} onClick={sendMessage} endIcon={<Send/>} >Send</Button>
-                            
-                            </Box>
+                        <Grid2 marginTop={"11px"}xs={10}>
+                        <ChatBody socket={socket} username={username} room={room}/>
                         </Grid2>
+                        
                     </Grid2>
                 </Container>
             </Box>
