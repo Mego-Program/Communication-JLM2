@@ -66,26 +66,26 @@ export default function ChatBody({socket, username, room}) {
               {messageReceived.map((message_content) => {
                 if (message_content.aouter === username) {
                 return (
-                  <Box display='flex' margin={"10px 65px 10px 10px"}>
-                  <Stack border={"2px gray solid"} borderRadius={"15px 7px 15px 0px "}>
-                  <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} fontSize='10px' padding='5px' sx={{bgcolor: "greenעןא", width:"100%"}} borderBottom={"2px gray solid"} borderRadius={"13px 5px 0px 0px"}>
+                  <Box display='flex' justifyContent="right" margin={"10px 10px 10px 70px"}>
+                  <Stack border={"2px gray solid"} borderRadius={"10px 20px 0px 20px "}>
+                  <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"} fontSize='10px' padding='3px 15px 3px 3px' sx={{bgcolor: "blue", width:"100%"}} borderBottom={"2px gray solid"} borderRadius={"8px 17px 0px 0px"}>
                       <Box padding={"0px 25px 0px 0px"}>{message_content.aouter}</Box>
                       <Box bgcolor={"white"}>{message_content.time}</Box> 
                   </Box>
-                    <Box id="content" padding="2px 10px" color={"#000000"} bgcolor={"#ffffff"} borderRadius={"0px 0px 13px 0px"}>
+                    <Box id="content" padding="2px 10px" color={"#000000"} bgcolor={"#ffffff"} borderRadius={"0px 0px 0px 18px"}>
                       {message_content.message}</Box>
                     </Stack>
                 </Box>)}
                 else {
                   return (
                   
-                    <Box display='flex' justifyContent="right" margin={"10px 10px 10px 65px"}>
-                  <Stack border={"2px gray solid"} borderRadius={"7px 15px 0px 15px"}>
-                  <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}fontSize='10px' padding='5px' sx={{bgcolor: "blue", width:"100%", borderRadius:"5px 13px 0px 0px"}} borderBottom={"2px gray solid"}>
+                    <Box display='flex'  margin={"10px 70px 10px 10px"}>
+                  <Stack border={"2px gray solid"} borderRadius={"15px 7px 15px 0px"}>
+                  <Box display={"flex"} flexDirection={"row"} justifyContent={"space-between"}fontSize='10px' padding='5px' sx={{bgcolor: "purple", width:"100%", borderRadius:"13px 5px 0px 0px"}} borderBottom={"2px gray solid"}>
                       <Box padding={"0px 25px 0px 0px"}>{message_content.aouter}</Box>
                       <Box >{message_content.time}</Box> 
                   </Box>
-                    <Box padding="2px 10px" display={"flex"} color={"black"} bgcolor={"#ffffff"} borderRadius={"0px 0px 0px 13px"}>
+                    <Box padding={"0px 5px 0px 10px"} display={"flex"} color={"black"} bgcolor={"#ffffff"} borderRadius={"0px 0px 13px 0px"}>
                       {message_content.message}</Box>
                     </Stack>
                     </Box>
