@@ -7,11 +7,13 @@ import { CssBaseline } from '@mui/material';
 import theme from './components/theme.js';
 
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
       <ThemeProvider theme={theme}>
       <CssBaseline/>
-    <App />
+    <App/>
+    
     </ThemeProvider>
   </React.StrictMode>,
 )

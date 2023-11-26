@@ -9,7 +9,7 @@ import ChatBody from './chat-body';
 //const socket = io.connect("https://jlm-com-server-2.onrender.com/")
 const socket = io.connect("http://localhost:3001")
 const ariaLabel = { 'aria-label': 'description' };
-//let userList = [1,2,3,4,5]
+
 
 export default function Chat() {
     const [room, setRoom] = useState('')
