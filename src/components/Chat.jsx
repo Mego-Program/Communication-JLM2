@@ -7,7 +7,7 @@ import theme from "./theme";
 import ChatBody from "./chat-body";
 
 const socket = io.connect("https://jlm-com-server-2.onrender.com/");
-// const socket = io.connect("http://localhost:3001")
+//const socket = io.connect("http://localhost:3001")
 const ariaLabel = { "aria-label": "description" };
 
 export default function Chat() {
