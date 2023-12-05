@@ -11,8 +11,8 @@ const socket = io.connect("https://jlm-com-server-2.onrender.com/");
 const ariaLabel = { "aria-label": "description" };
 
 export default function Chat() {
-  const  myname="nisim"
-  const leatname = "amsallem"
+
+  const fullname = nncdjkssdcndk
 
   const cosntUser = "nissim"
   const [room, setRoom] = useState("");
