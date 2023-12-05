@@ -12,6 +12,7 @@ const ariaLabel = { "aria-label": "description" };
 
 export default function Chat() {
   const  myname="nisim"
+  const leatname = "amsallem"
 
   const cosntUser = "nissim"
   const [room, setRoom] = useState("");
