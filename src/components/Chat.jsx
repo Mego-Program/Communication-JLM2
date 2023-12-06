@@ -1,41 +1,31 @@
 import io from "socket.io-client";
 import { useState } from "react";
 import Button from "@mui/material/Button";
-import { Container, Input, TextField, Box } from "@mui/material";
+import { Container, Input, TextField, Box, ButtonGroup } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import theme from "./theme";
 import ChatBody from "./chat-body";
+import ImageAvatars from "./Avatars";
+import TempDB from './TempDB'
 
 const socket = io.connect("https://jlm-com-server-2.onrender.com/");
 //const socket = io.connect("http://localhost:3001")
 const ariaLabel = { "aria-label": "description" };
 
 export default function Chat() {
-
-  const fullname = nncdjkssdcndk
-
-  const cosntUser = "nissim"
   const [room, setRoom] = useState("");
   const [username, setUsername] = useState("");
-  const [roomList, setRoomList] = useState([<Button>{"Main Room"}</Button>]);
   const [showChat, setshowChat] = useState(false);
   //const [showrooms, setshowrooms] = useState(false)
 
-  const joinRoom = (Event) => {
-    
-    console.log(roomList, room, roomList.includes(room));
-
-    if (room.trim(" ") && username.trim(" ")) {
-      if (!roomList.includes(room)) {
-        socket.emit("join_room", room);
-        setRoomList([...roomList, room]);
-      }
-      Event.target.value = "";
+  const enterChat = () => {
       setshowChat(true);
-    } else {
-      console.log("name room is empty");
-    }
   };
+
+  const getRoom = (selectRoom) =>{
+    setRoom(selectRoom)
+    console.log(selectRoom)
+  }
 
   return (
     <div>
@@ -58,7 +48,7 @@ export default function Chat() {
                     width: "100%",
                     border: "2px #Ffffff solid",
                     bgcolor: "#21213E",
-                    padding:"0 0 0 100px "
+                    padding: "0 0 0 100px ",
                   }}
                   disableUnderline={true}
                   placeholder="user name"
@@ -72,13 +62,13 @@ export default function Chat() {
                   borderRadius={"7px"}
                   bgcolor={theme.palette.chat.navBar}
                   height={"50vh"}
-                  display={'flex'}
-                  flexDirection={'column'}
-                  justifyContent={'center'}
-                  alignItems={'center'}
+                  display={"flex"}
+                  flexDirection={"column"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
                 >
-                  <TextField
-                    sx={{ input: { color: "#ffffff" }, width:"20vh"}}
+                  {/* <TextField
+                    sx={{ input: { color: "#ffffff" }, width: "20vh" }}
                     type="text"
                     name="room number"
                     placeholder="room number"
@@ -90,32 +80,76 @@ export default function Chat() {
                         joinRoom(Event);
                       }
                     }}
-                  />
-                    <Button bgcolor={theme.palette.white.main} onClick={joinRoom}>
-                        join room
-                    </Button>
+                  /> */}
+                  <Button bgcolor={theme.palette.white.main} onClick={enterChat}>
+                    join room
+                  </Button>
                   {/* <Box className="room_list">{roomList}</Box> */}
                 </Box>
               </Grid2>
             </Grid2>
           </Container>
         ) : (
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            flexDirection={"column"}
-            xs={12}
-          >
-            <Button
-              sx={{ width: "4vh",marginTop:'20px' }}
-              onClick={() => {
-                setshowChat(false) && setRoom("");
-              }}
-            >
-              Home page
-            </Button>
-             <ChatBody socket={socket} username={username} room={room} />          
-          </Box>
+          <Container>
+            <Grid2
+              container spacing={0.0}
+              height={"100vh"}
+              display={"flex"}
+              // flexDirection={"column"}
+              justifyContent={"center"}
+              alignItems={"center"}>
+              <Grid2>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  flexDirection={"column"}>
+                    <ImageAvatars socket={socket} className="users" users={TempDB.userList}/>
+                </Box>                
+              </Grid2>
+              <Grid2>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  flexDirection={"column"}>
+                    <ImageAvatars socket={socket} className="rooms" rooms={TempDB.roomList} room={getRoom}/>
+                </Box>
+              </Grid2>
+              <Grid2>
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  flexDirection={"column"}>
+                    <ChatBody socket={socket} username={username} room={room} />
+                </Box>
+              </Grid2>
+              <Grid2
+               display={"flex"}
+               flexDirection={"column"}
+               justifyContent={"center"}
+               alignItems={"end"}
+               height={"80vh"}>
+                <ButtonGroup 
+                        orientation="vertical"
+                        aria-label="vertical outlined button group">
+                    <Button
+                      sx={{ width: "12vh", marginTop: "20px" }}>
+                        function 1
+                    </Button>
+                    <Button
+                      sx={{ width: "12vh", marginTop: "20px" }}>
+                        function 2
+                    </Button>
+                    <Button
+                      sx={{ width: "12vh", marginTop: "20px" }}
+                      onClick={() => {
+                        setshowChat(false) && setRoom("");
+                      }}>
+                        Home page
+                    </Button>
+                  </ButtonGroup>
+              </Grid2>
+            </Grid2>
+          </Container>
         )}
       </Box>
     </div>
