@@ -13,16 +13,21 @@ function scrollToBottom() {
 
 const ariaLabel = { "aria-label": "description" };
 
-export default function ChatBody({ socket, username, room }) {
+export default function ChatBody(props) {
   const [message, setMessage] = useState("");
   const [messageReceived, setMessageReceived] = useState([]);
   const [scrollFlag, setscrollFlag] = useState(false);
 
+  const socket = props.socket
+  const username = props.username
+
+
   const sendMessage = async () => {
-    if (message.trim(" ") && username.trim(" ") ) {
-      console.log(messageReceived);
+    console.log(props.room)
+    if (message.trim(" ") && username.trim(" ") && props.room !== '') {
+      console.log(messageReceived[messageReceived.length-1]);
       const messageData = {
-        room: room,
+        room: props.room,
         aouter: username,
         message: message,
         time:
@@ -57,7 +62,8 @@ export default function ChatBody({ socket, username, room }) {
       scrollToBottom();
       setscrollFlag(false);
     }
-  });
+  },[scrollFlag]);
+
   return (
     <div>
       <Box width="60vh" display={"flex"} flexDirection={"column"}>
@@ -73,7 +79,7 @@ export default function ChatBody({ socket, username, room }) {
           bgcolor={theme.palette.chat.navBar}
           height={"10vh"}
         >
-          {`${username} You are on live chat in room: ${room}`}
+          {`${username} You are on live chat in room: ${props.room}`}
         </Box>
 
         <Box
@@ -95,7 +101,7 @@ export default function ChatBody({ socket, username, room }) {
           bgcolor={theme.palette.white}
           height={"55vh"}
         >
-          {messageReceived.map((message_content,index) => {
+          {messageReceived.filter((object)=>object.room === props.room).map((message_content,index) => {
             if (message_content.aouter === username) {
               return (
                 <Box
