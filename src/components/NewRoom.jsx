@@ -27,9 +27,7 @@ export default function FormDialog(props) {
         setRoomData((prevRoomData) => ({ ...prevRoomData, [label]: value }));
     }
 
-    const handleNewRoom = (e) => {
-        e.preventDefault()
-
+    const handleNewRoom = () => {
         console.log("get to server",roomData);
         socket.emit("createRoom", (roomData), (response) => {
             console.log(response.status);
@@ -74,7 +72,7 @@ export default function FormDialog(props) {
                     <Button
                         sx={{ bgcolor: "#31213E" }}
                         onClick={() => {
-                            handleClose(), handleNewRoom(e);
+                            handleClose(), handleNewRoom();
                         }}
                         type="submit"
                     >

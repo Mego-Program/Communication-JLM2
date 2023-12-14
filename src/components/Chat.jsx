@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import { useState,useEffect } from "react";
 import Button from "@mui/material/Button";
-import { Container, Input, TextField, Box, ButtonGroup, Switch,FormControlLabel } from "@mui/material";
+import { Container, Input, Box, ButtonGroup, Switch,FormControlLabel } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import theme from "./theme";
 import ChatBody from "./chat-body";
@@ -31,10 +31,10 @@ export default function Chat() {
 
   const [room, setRoom] = useState("");
   const [username, setUsername] = useState("");
-  const [showChat, setshowChat] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   const enterChat = () => {
-      setshowChat(true);
+      setShowChat(true);
   };
 
   const getRoom = (selectRoom) =>{
@@ -118,7 +118,7 @@ export default function Chat() {
                   display={"flex"}
                   alignItems={"center"}
                   flexDirection={"column"}>
-                    <ChatBody socket={socket} username={username} room={room} saveData={saveData}/>
+                    <ChatBody socket={socket} users={userList} username={username} room={room} saveData={saveData}/>
                 </Box>
               </Grid2>
               <Grid2
@@ -141,7 +141,7 @@ export default function Chat() {
                     <Button 
                       sx={{ width: "12vh", marginTop: "20px" }}
                       onClick={() => {
-                        setshowChat(false) && setRoom("");
+                        setShowChat(false) && setRoom("");
                       }}>
                         Home page
                     </Button>

@@ -1,10 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect,memo } from "react";
 import { Input, Button, Box, Stack, Tooltip } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import theme from "./theme";
 import { animateScroll } from "react-scroll";
-import { connect } from "socket.io-client";
 
 function scrollToBottom() {
   animateScroll.scrollToBottom({
@@ -27,16 +26,21 @@ export default function ChatBody(props) {
   const [writeName, setWriteName] = useState({});
   const [messageTo, setMessageTo] = useState("");
 
+
   const socket = props.socket;
   const username = props.username;
+  
+  const socketWasCalled = React.useRef(false);
 
   useEffect(() => {
-    socket.emit("upLoadOldmessages", username);
+      if(socketWasCalled.current) return;
+      socket.emit("upLoadOldmessages", username);
+      socketWasCalled.current = true;
+        /* CODE THAT SHOULD RUN ONCE */
   }, []);
 
   const sendMessage = async () => {
     console.log(props.room);
-
     if (message.trim(" ") && username.trim(" ") && props.room !== "") {
       const messageData = {
         to: messageTo,
