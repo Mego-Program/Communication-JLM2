@@ -12,11 +12,13 @@ import FormDialog from "./NewRoom.jsx";
 // const socket = io.connect("https://jlm-com-server-2.onrender.com/");
 const socket = io.connect("http://localhost:3001")
 const ariaLabel = { "aria-label": "description" };
+const userToken = localStorage.getItem('token')
 
 export default function Chat() {
   const [roomList, setRoomList] = useState([])
   const [userList, setUserList] = useState([])
   const [saveData,setSaveData] = useState(false)
+  const [messageTo, setMessageTo] = useState("");
 
   useEffect(() => {
     socket.on("roomList",(data)=>{setRoomList(data)});
@@ -40,6 +42,16 @@ export default function Chat() {
   const getRoom = (selectRoom) =>{
     setRoom(selectRoom)
     console.log(selectRoom)
+  }
+
+  const handleMessageTo = (props)=>{
+    if (messageTo == props.nameID){
+      setMessageTo('')
+      console.log(props.nameID, messageTo)
+    }
+    else{
+      setMessageTo(props.nameID)
+    }
   }
 
   return (
@@ -102,7 +114,7 @@ export default function Chat() {
                   display={"flex"}
                   alignItems={"center"}
                   flexDirection={"column"}>
-                    <ImageAvatars socket={socket} className="users" users={userList}/>
+                    <ImageAvatars socket={socket} messageTo={handleMessageTo} signMessageTo={messageTo} username={username} className="users" users={userList}/>
                 </Box>                
               </Grid2>
               <Grid2>
@@ -118,7 +130,7 @@ export default function Chat() {
                   display={"flex"}
                   alignItems={"center"}
                   flexDirection={"column"}>
-                    <ChatBody socket={socket} users={userList} username={username} room={room} saveData={saveData}/>
+                    <ChatBody socket={socket} users={userList} messageTo={messageTo} userToken={userToken} username={username} room={room} saveData={saveData}/>
                 </Box>
               </Grid2>
               <Grid2

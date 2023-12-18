@@ -24,27 +24,29 @@ export default function ChatBody(props) {
   const [scrollFlag, setscrollFlag] = useState(false);
   const [replyFlag, setReplyFlag] = useState(false);
   const [writeName, setWriteName] = useState({});
-  const [messageTo, setMessageTo] = useState("");
 
 
   const socket = props.socket;
   const username = props.username;
-  
+//  const userToken = props.userToken;
+//  const username = JWT.ecoded
+
   const socketWasCalled = React.useRef(false);
 
   useEffect(() => {
       if(socketWasCalled.current) return;
       socket.emit("upLoadOldmessages", username);
+
       socketWasCalled.current = true;
         /* CODE THAT SHOULD RUN ONCE */
   }, []);
 
   const sendMessage = async () => {
     console.log(props.room);
-    if (message.trim(" ") && username.trim(" ") && props.room !== "") {
+    if (message.trim(" ") && username.trim(" ") && props.room !== "" || props.messageTo !=="") {
       const messageData = {
-        to: messageTo,
-        typeMessage: messageTo === "" ? "public" : "privte",
+        to: props.messageTo,
+        typeMessage: props.messageTo === "" ? "public" : "privte",
         room: props.room,
         aouter: username,
         message: message,
@@ -67,19 +69,12 @@ export default function ChatBody(props) {
       setscrollFlag(true);
     });
 
-    socket.on("privte_message", (message) => {
-      setMessageReceived((list) => [...list, message]);
-      setscrollFlag(true);
-    });
-
     socket.on("oldMessages", (data) => {
       data.map((object) => setMessageReceived((list) => [...list, object]));
     });
 
     socket.on("disconnect", () => {
       console.warn("disconnected from the server!");
-      
-      
     });
 
     return () => {
@@ -140,7 +135,7 @@ export default function ChatBody(props) {
           height={"55vh"}
         >
           {messageReceived
-            .filter((object) => object.room === props.room)
+            .filter((object) => props.messageTo ===""?object.room === props.room && object.typeMessage==="public":(object.typeMessage==="privte" && (object.to===props.messageTo || object.aouterID === props.messageTo)))
             .map((message_content, index) => {
               if (message_content.aouter === username) {
                 message_content.loc = scrollTo;
