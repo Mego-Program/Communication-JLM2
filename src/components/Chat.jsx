@@ -9,8 +9,8 @@ import ImageAvatars from "./Avatars";
 import FormDialog from "./NewRoom.jsx";
 
 
-// const socket = io.connect("https://jlm-com-server-2.onrender.com/");
-const socket = io.connect("http://localhost:3001")
+const socket = io.connect("https://jlm-com-server-2.onrender.com/");
+//const socket = io.connect("http://localhost:3001")
 const ariaLabel = { "aria-label": "description" };
 
 export default function Chat() {
@@ -44,9 +44,9 @@ export default function Chat() {
 
   return (
     <div>
-      <Box bgcolor={theme.palette.chat.main} flexGrow={1} height={"100vh"}>
+      <Grid2 bgcolor={theme.palette.chat.main} >
         {!showChat ? (
-          <Container>
+          <Container padding={"0"}>
             <Grid2
               height={"100vh"}
               display={"flex"}
@@ -70,7 +70,7 @@ export default function Chat() {
                   inputProps={ariaLabel}
                   onChange={(Event) => setUsername(Event.target.value)}
                 />
-                <Box
+                <Grid2
                   marginTop={"2px"}
                   border={"2px #F6C927 solid"}
                   borderRadius={"7px"}
@@ -84,45 +84,29 @@ export default function Chat() {
                   <Button bgcolor={theme.palette.white.main} onClick={enterChat}>
                     join room
                   </Button>
-                </Box>
+                </Grid2>
               </Grid2>
             </Grid2>
           </Container>
         ) : (
           <Container>
-            <Grid2
+            <Grid2 
               container spacing={0.0}
               height={"100vh"}
-              display={"flex"}
-              // flexDirection={"column"}
               justifyContent={"center"}
-              alignItems={"center"}>
-              <Grid2>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  flexDirection={"column"}>
+              alignItems={"center"}
+              >
+              <Grid2 sx={{display:{xs:"none",md:"block"}}}>
                     <ImageAvatars socket={socket} className="users" users={userList}/>
-                </Box>                
               </Grid2>
-              <Grid2>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  flexDirection={"column"}>
+              <Grid2 sx={{display:{xs:"none",md:"block"}}}>
                     <ImageAvatars socket={socket} className="rooms" rooms={roomList} room={getRoom}/>
-                </Box>
               </Grid2>
-              <Grid2>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  flexDirection={"column"}>
-                    <ChatBody socket={socket} users={userList} username={username} room={room} saveData={saveData}/>
-                </Box>
-              </Grid2>
-              <Grid2
-               display={"flex"}
+                <Grid2 xs={12} md={10} 
+                  >
+                    <ChatBody socket={socket} users={userList} username={username} room={room} getRoom={getRoom} rooms={roomList} saveData={saveData} />
+                </Grid2>
+              <Grid2 sx={{display:{xs:"none"}}}
                flexDirection={"column"}
                justifyContent={"center"}
                alignItems={"end"}
@@ -150,7 +134,7 @@ export default function Chat() {
             </Grid2>
           </Container>
         )}
-      </Box>
+      </Grid2>
     </div>
   );
 }

@@ -4,6 +4,8 @@ import { Input, Button, Box, Stack, Tooltip } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import theme from "./theme";
 import { animateScroll } from "react-scroll";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import BasicMenu from "./menu";
 
 function scrollToBottom() {
   animateScroll.scrollToBottom({
@@ -99,21 +101,37 @@ export default function ChatBody(props) {
 
   return (
     <div>
-      <Box width="60vh" display={"flex"} flexDirection={"column"}>
-        <Box
-          display="flex"
+      <Grid2 width="100%" /*display={"flex"} flexDirection={"column"}*/>
+        <Grid2 sx={{display:{xs:"none",md:"flex"}}}
+          //display="flex"
           justifyContent="center"
           alignItems={"center"}
           className="chat-header"
           border={"2px #F6C927 solid"}
           borderRadius={"7px"}
-          margin={"7px"}
+          //margin={"7px"}
           color={theme.palette.primary.main}
           bgcolor={theme.palette.chat.navBar}
           height={"10vh"}
         >
           {`${username} You are on live chat in room: ${props.room}`}
-        </Box>
+        </Grid2>
+        <Grid2 sx={{display:{xs:"flex",md:"none"}}}
+          //display="flex"
+          //justifyContent="center"
+          alignItems={"center"}
+          className="chat-header"
+          border={"2px #F6C927 solid"}
+          borderRadius={"7px"}
+          color={theme.palette.primary.main}
+          bgcolor={theme.palette.chat.navBar}
+          height={"10vh"}
+        >
+          <BasicMenu className={'users'} socket={props.socket} rooms={props.rooms} room={props.getRoom} users={props.users}></BasicMenu>
+          <BasicMenu className={'rooms'} socket={props.socket} rooms={props.rooms} room={props.getRoom} users={props.users}></BasicMenu>
+          {/* <BasicMenu/> */}
+          {`${username}`}
+        </Grid2>
         <Box
           id="chat-box"
           sx={{
@@ -135,9 +153,9 @@ export default function ChatBody(props) {
           }}
           border={"2px #F6C927 solid"}
           borderRadius={"7px"}
-          margin={"7px"}
+          margin={"7px 0 0 0"}
           bgcolor={theme.palette.white}
-          height={"55vh"}
+          height={"75vh"}
         >
           {messageReceived
             .filter((object) => object.room === props.room)
@@ -273,7 +291,7 @@ export default function ChatBody(props) {
           flexDirection={"row"}
           border={"2px #F6C927 solid"}
           borderRadius={"7px"}
-          margin={"7px"}
+          margin={"7px 0 0 0"}
           bgcolor={theme.palette.chat.navBar}
           height={"10vh"}
         >
@@ -284,7 +302,7 @@ export default function ChatBody(props) {
               borderRadius: "7px",
               padding: "0 5px 0 20px",
               margin: "1px",
-              width: "80%",
+              width: "100%",
               "&::-webkit-scrollbar": {
                 width: "5px",
               },
@@ -309,7 +327,7 @@ export default function ChatBody(props) {
             endIcon={<Send />}
           />
         </Box>
-      </Box>
+      </Grid2>
     </div>
   );
 }

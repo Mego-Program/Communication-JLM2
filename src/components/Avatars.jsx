@@ -65,7 +65,7 @@ export default function ImageAvatars(props) {
       border={"2px #F6C927 solid"}
       margin={"1vh"}
       borderRadius={"7px"}
-      height={"80vh"}
+      height={"97vh"}
       width={"12vh"}
       display={"flex"}
       flexDirection={"column"}
