@@ -1,7 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import { Box, Container } from "@mui/material";
 import { Button } from "react-scroll";
 import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
@@ -52,13 +51,7 @@ export default function ImageAvatars(props) {
   const joinRoom = (object) => {
     socket.emit("join_room", object.roomID);
     props.room(object.roomID);
-    console.log(object.roomID);
   };
-  // const messageTo = (object) => {
-  //   socket.emit("join_room", object.roomID);
-  //   props.room(object.roomID)
-  //   console.log(object.roomID)
-  // }
 
   return (
     <Stack
@@ -93,15 +86,15 @@ export default function ImageAvatars(props) {
     >
       {" "}
       {props.className === "users"
-        ? props.users.map((object) => (
+        ? props.users.filter((object)=> object.userName!==props.username).map((object) => (
             <StyledBadge
               key={object.nameID}
-              onClick={() => messageTo(object)}
+              onClick={() => props.messageTo(object)}
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               variant={object.status === "connect" ? "dot" : "standart"}
             >
-              <Avatar alt={object.userName} />
+              <Avatar alt={object.userName} sx={{bgcolor:object.nameID === props.signMessageTo?"tomato":"lightblue"}}>{object.userName[0]}</Avatar>
             </StyledBadge>
           ))
         : props.rooms.map((object, index) => (
@@ -109,8 +102,7 @@ export default function ImageAvatars(props) {
               index={index}
               key={object.roomID}
               onClick={() => joinRoom(object)}
-            >
-              <Avatar alt={object.roomName} />
+            >{object.roomName}
             </Button>
           ))}
       {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
