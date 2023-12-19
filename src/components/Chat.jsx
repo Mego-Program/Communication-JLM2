@@ -1,30 +1,54 @@
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Badge from '@mui/material/Badge';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+
+
 import io from "socket.io-client";
 import { useState,useEffect } from "react";
-import Button from "@mui/material/Button";
-import { Container, Input, Box, ButtonGroup, Switch,FormControlLabel } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import theme from "./theme";
 import ChatBody from "./chat-body";
 import ImageAvatars from "./Avatars";
-import FormDialog from "./NewRoom.jsx";
-
+import Rooms from "./Rooms"
 
 // const socket = io.connect("https://jlm-com-server-2.onrender.com/");
 const socket = io.connect("http://localhost:3001")
-const ariaLabel = { "aria-label": "description" };
 const userToken = localStorage.getItem('token')
 
 export default function Chat() {
+
   const [roomList, setRoomList] = useState([])
   const [userList, setUserList] = useState([])
-  const [saveData,setSaveData] = useState(false)
   const [messageTo, setMessageTo] = useState("");
+
+  const [viewRoomList,setViewRoomList] = useState(false)
+
+  const handleViewRoom = ()=>{
+    setViewRoomList(true)
+    setViewUserList(false)
+  }
+  
+  const [viewUserList,setViewUserList] = useState(false)
+  const handleViewUsers = ()=>{
+    setViewRoomList(false)
+    setViewUserList(true)
+  }
+
+  const handleViewMessages = ()=>{
+    setViewRoomList(false)
+    setViewUserList(false)
+  }
 
   useEffect(() => {
     socket.on("roomList",(data)=>{setRoomList(data)});
     socket.on("userList",(data) =>{setUserList(data)});
-    
-    
+        
     return () =>{
       socket.off('roomList');
       socket.off('userList');
@@ -32,137 +56,111 @@ export default function Chat() {
   },[socket]);
 
   const [room, setRoom] = useState("");
-  const [username, setUsername] = useState("");
-  const [showChat, setShowChat] = useState(false);
+  const username ="nissim";
 
-  const enterChat = () => {
-      setShowChat(true);
-  };
-
-  const getRoom = (selectRoom) =>{
+  const handleRoom = (selectRoom) =>{
     setRoom(selectRoom)
-    console.log(selectRoom)
   }
 
   const handleMessageTo = (props)=>{
     if (messageTo == props.nameID){
       setMessageTo('')
-      console.log(props.nameID, messageTo)
     }
     else{
       setMessageTo(props.nameID)
     }
   }
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const isMenuOpen = Boolean(anchorEl);
 
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={()=> {handleMenuClose(),handleViewRoom()}}>ROOMS</MenuItem>
+      <MenuItem onClick={()=> {handleMenuClose(),handleViewUsers()}}>USERS</MenuItem>
+    </Menu>
+  );
+  
   return (
-    <div>
-      <Box bgcolor={theme.palette.chat.main} flexGrow={1} height={"100vh"}>
-        {!showChat ? (
-          <Container>
-            <Grid2
-              height={"100vh"}
-              display={"flex"}
-              flexDirection={"column"}
-              justifyContent={"center"}
-              alignItems={"center"}
+    <Box sx={{flexGrow: 1 }}>
+      <AppBar position="static" sx={{bgcolor:'#0A0A1B'}}>
+        <Toolbar>
+          <IconButton
+            sx={{ display: { xs: 'flex', md: 'none' }, mr: 2 ,color:"gold" }}
+            size="large"
+            edge="start"
+            aria-label="open drawer"
+            onClick={handleProfileMenuOpen}
+          >
+            <MenuIcon/>
+          </IconButton>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ display: { xxs: 'none', sm: 'block' } }}
+          >
+            Chat Live - JLM  | {username}
+          </Typography>
+
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
             >
-              <Grid2>
-                <Input
-                  sx={{
-                    input: { color: "#ffffff" },
-                    borderRadius: "7px",
-                    margin: "20px 0px 7px",
-                    width: "100%",
-                    border: "2px #Ffffff solid",
-                    bgcolor: "#21213E",
-                    padding: "0 0 0 100px ",
-                  }}
-                  disableUnderline={true}
-                  placeholder="user name"
-                  inputProps={ariaLabel}
-                  onChange={(Event) => setUsername(Event.target.value)}
-                />
-                <Box
-                  marginTop={"2px"}
-                  border={"2px #F6C927 solid"}
-                  borderRadius={"7px"}
-                  bgcolor={theme.palette.chat.navBar}
-                  height={"50vh"}
-                  display={"flex"}
-                  flexDirection={"column"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                >
-                  <Button bgcolor={theme.palette.white.main} onClick={enterChat}>
-                    join room
-                  </Button>
-                </Box>
-              </Grid2>
-            </Grid2>
-          </Container>
-        ) : (
-          <Container>
-            <Grid2
-              container spacing={0.0}
-              height={"100vh"}
-              display={"flex"}
-              // flexDirection={"column"}
-              justifyContent={"center"}
-              alignItems={"center"}>
-              <Grid2>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  flexDirection={"column"}>
-                    <ImageAvatars socket={socket} messageTo={handleMessageTo} signMessageTo={messageTo} username={username} className="users" users={userList}/>
-                </Box>                
-              </Grid2>
-              <Grid2>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  flexDirection={"column"}>
-                    <ImageAvatars socket={socket} className="rooms" rooms={roomList} room={getRoom}/>
-                </Box>
-              </Grid2>
-              <Grid2>
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  flexDirection={"column"}>
-                    <ChatBody socket={socket} users={userList} messageTo={messageTo} userToken={userToken} username={username} room={room} saveData={saveData}/>
-                </Box>
-              </Grid2>
-              <Grid2
-               display={"flex"}
-               flexDirection={"column"}
-               justifyContent={"center"}
-               alignItems={"end"}
-               height={"80vh"}>
-                <ButtonGroup 
-                        orientation="vertical"
-                        aria-label="vertical outlined button group">
-                    <FormControlLabel color={"gold"}  sx={{color:"gold"}} control={<Switch  onChange={()=>setSaveData(!saveData)} />} label={saveData?"Save messages":"No save messages"} />
+              <Badge badgeContent={3} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      {renderMenu}
+  
+    {!viewRoomList && !viewUserList && <Box sx={{display:'flex', flexDirection:"row",bgcolor:'#21213E'}}>
+          <Box sx={{color:"gold", mr: 2, display: { xs: 'none', md: 'flex' } }}>
+            <ImageAvatars messageTo={handleMessageTo} signMessageTo={messageTo} username={username} users={userList}/>
+          </Box>
+          <Box sx={{  color:"gold",mr: 2, display: { xs: 'none', md: 'flex' } }}> 
+            <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
+          </Box>
+          <Box sx={{ width:"80vh", color:"gold", mr: 2, md:"flex"}} >
+            <ChatBody socket={socket} users={userList} messageTo={messageTo} userToken={userToken} username={username} room={room}/>
+          </Box>
+      </Box>}
 
-                    <Button
-                      sx={{ width: "12vh", marginTop: "20px" }}>
-                        function 1
-                    </Button>
-                    <FormDialog modelRoom={roomList[0]} socket={socket}>Add New Room</FormDialog>
-
-                    <Button 
-                      sx={{ width: "12vh", marginTop: "20px" }}
-                      onClick={() => {
-                        setShowChat(false) && setRoom("");
-                      }}>
-                        Home page
-                    </Button>
-                  </ButtonGroup>
-              </Grid2>
-            </Grid2>
-          </Container>
-        )}
-      </Box>
-    </div>
+      {viewRoomList || viewUserList && <Box onClick={handleViewMessages} sx={{display:'flex', flexDirection:"row",bgcolor:'#21213E'}}>
+          {viewUserList && <Box sx={{color:"gold", mr: 2, display:'flex' }}>
+            <ImageAvatars  messageTo={handleMessageTo} signMessageTo={messageTo} username={username} users={userList}/>
+          </Box>}
+          {viewRoomList && <Box sx={{  color:"gold",mr: 2, display:"flex" }}> 
+            <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
+          </Box>}
+      </Box>}
+    </Box>
   );
 }
