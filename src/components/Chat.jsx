@@ -5,7 +5,6 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -16,6 +15,7 @@ import { useState,useEffect } from "react";
 import ChatBody from "./chat-body";
 import ImageAvatars from "./Avatars";
 import Rooms from "./Rooms"
+import { Button } from 'react-scroll';
 
 // const socket = io.connect("https://jlm-com-server-2.onrender.com/");
 const socket = io.connect("http://localhost:3001")
@@ -27,22 +27,10 @@ export default function Chat() {
   const [userList, setUserList] = useState([])
   const [messageTo, setMessageTo] = useState("");
 
-  const [viewRoomList,setViewRoomList] = useState(false)
+  const [changeScreen,setChangeScreen] = useState(false)
 
-  const handleViewRoom = ()=>{
-    setViewRoomList(true)
-    setViewUserList(false)
-  }
-  
-  const [viewUserList,setViewUserList] = useState(false)
-  const handleViewUsers = ()=>{
-    setViewRoomList(false)
-    setViewUserList(true)
-  }
-
-  const handleViewMessages = ()=>{
-    setViewRoomList(false)
-    setViewUserList(false)
+  const handleChangeScreen = ()=>{
+    setChangeScreen(!changeScreen)
   }
 
   useEffect(() => {
@@ -70,38 +58,6 @@ export default function Chat() {
       setMessageTo(props.nameID)
     }
   }
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const isMenuOpen = Boolean(anchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={()=> {handleMenuClose(),handleViewRoom()}}>ROOMS</MenuItem>
-      <MenuItem onClick={()=> {handleMenuClose(),handleViewUsers()}}>USERS</MenuItem>
-    </Menu>
-  );
   
   return (
     <Box sx={{flexGrow: 1 }}>
@@ -112,15 +68,16 @@ export default function Chat() {
             size="large"
             edge="start"
             aria-label="open drawer"
-            onClick={handleProfileMenuOpen}
-          >
+        
+            onClick={handleChangeScreen}>
+     
             <MenuIcon/>
           </IconButton>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xxs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: 'none', sm: 'block' } }}
           >
             Chat Live - JLM  | {username}
           </Typography>
@@ -139,9 +96,9 @@ export default function Chat() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMenu}
+
   
-    {!viewRoomList && !viewUserList && <Box sx={{display:'flex', flexDirection:"row",bgcolor:'#21213E'}}>
+    {!changeScreen && <Box sx={{display:'flex', flexDirection:"row",bgcolor:'#21213E'}}>
           <Box sx={{color:"gold", mr: 2, display: { xs: 'none', md: 'flex' } }}>
             <ImageAvatars messageTo={handleMessageTo} signMessageTo={messageTo} username={username} users={userList}/>
           </Box>
@@ -153,13 +110,13 @@ export default function Chat() {
           </Box>
       </Box>}
 
-      {viewRoomList || viewUserList && <Box onClick={handleViewMessages} sx={{display:'flex', flexDirection:"row",bgcolor:'#21213E'}}>
-          {viewUserList && <Box sx={{color:"gold", mr: 2, display:'flex' }}>
+      {changeScreen && <Box sx={{display:'flex', flexDirection:"row",bgcolor:'#21213E'}}>
+           <Box sx={{color:"gold", mr: 2, display:'flex' }}>
             <ImageAvatars  messageTo={handleMessageTo} signMessageTo={messageTo} username={username} users={userList}/>
-          </Box>}
-          {viewRoomList && <Box sx={{  color:"gold",mr: 2, display:"flex" }}> 
+          </Box>
+          <Box sx={{  color:"gold",mr: 2, display:"flex" }}> 
             <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
-          </Box>}
+          </Box>
       </Box>}
     </Box>
   );
