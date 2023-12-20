@@ -1,4 +1,3 @@
-
 import Chat from "./components/Chat";
 import { CssBaseline } from '@mui/material';
 
@@ -7,7 +6,6 @@ export default  function App() {
     <div>
       <CssBaseline/>
       <Chat/>
-    
     </div>
   )
 }

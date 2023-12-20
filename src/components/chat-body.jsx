@@ -88,11 +88,11 @@ export default function ChatBody(props) {
 
   return (
     <div>
-      <Box sx={{width: "100%",margin:"7px",border:"2px #F6C927 solid", borderRadius:"7px", display:"flex", flexDirection:"column"}}>
+      <Box sx={{margin:"7px",border:"2px #F6C927 solid", borderRadius:"7px", display:"flex", flexDirection:"column"}}>
         <Box
           id="chat-box"
           color={"black"}
-          height={"79vh"}
+          height={"80vh"}
           sx={{
             borderRadius:"7px 7px 0px 0px",
             bgcolor:'#32324E',
