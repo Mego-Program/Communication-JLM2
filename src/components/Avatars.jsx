@@ -48,14 +48,13 @@ export default function ImageAvatars(props) {
 
   return (
     <Stack
-      borderRight={"2px #F6C927 solid"}
+
       margin={"1vh"}
       height={"89vh"}
       width={"24vh"}
       padding={"2vh"}
       display={"flex"}
       flexDirection={"column"}
-      // justifyContent={"center"}
       alignItems={"end"}
       spacing={0.5}
       sx={{

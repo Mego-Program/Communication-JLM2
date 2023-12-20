@@ -23,23 +23,25 @@ export default function ChatBody(props) {
   const [replyFlag, setReplyFlag] = useState(false);
   const [writeName, setWriteName] = useState({});
 
-
   const socket = props.socket;
   const username = props.username;
-//  const userToken = props.userToken;
-//  const username = JWT.ecoded
+  //  const userToken = props.userToken;
+  //  const username = JWT.ecoded
 
   const socketWasCalled = React.useRef(false);
 
   useEffect(() => {
-      if(socketWasCalled.current) return;
-      socket.emit("upLoadOldmessages", username);
+    if (socketWasCalled.current) return;
+    socket.emit("upLoadOldmessages", username);
 
-      socketWasCalled.current = true;
+    socketWasCalled.current = true;
   }, []);
 
   const sendMessage = async () => {
-    if (message.trim(" ") && username.trim(" ") && props.room !== "" || props.messageTo !=="") {
+    if (
+      (message.trim(" ") && username.trim(" ") && props.room !== "") ||
+      props.messageTo !== ""
+    ) {
       const messageData = {
         to: props.messageTo,
         typeMessage: props.messageTo === "" ? "public" : "privte",
@@ -88,31 +90,46 @@ export default function ChatBody(props) {
 
   return (
     <div>
-      <Box sx={{margin:"7px",border:"2px #F6C927 solid", borderRadius:"7px", display:"flex", flexDirection:"column"}}>
+      <Box
+        sx={
+          props.bigScreen
+            ? { height: "85vh", display: "flex", flexDirection: "column" }
+            : { height: "92vh", display: "flex", flexDirection: "column" }
+        }
+      >
         <Box
           id="chat-box"
           color={"black"}
-          height={"80vh"}
           sx={{
-            borderRadius:"7px 7px 0px 0px",
-            bgcolor:'#32324E',
+            height: "85vh",
+            borderRadius: "7px 7px 0px 0px",
+            bgcolor: "#32324E",
             color: "#ffffff",
             overflow: "auto",
-            "&::-webkit-scrollbar": {width: "10px"},
-            "&::-webkit-scrollbar-track": {boxShadow: "inset 0 0 5px silver;"},
+            "&::-webkit-scrollbar": { width: "10px" },
+            "&::-webkit-scrollbar-track": {
+              boxShadow: "inset 0 0 5px silver;",
+            },
             "&::-webkit-scrollbar-thumb": {
               background: "gold",
               borderRadius: "10px",
             },
-            "&::-webkit-scrollbar-thumb:hover": {background: "#b30000"},
-          }}>
+            "&::-webkit-scrollbar-thumb:hover": { background: "#b30000" },
+          }}
+        >
           {messageReceived
-            .filter((object) => props.messageTo ===""?object.room === props.room && object.typeMessage==="public":(object.typeMessage==="privte" && (object.to===props.messageTo || object.aouterID === props.messageTo)))
+            .filter((object) =>
+              props.messageTo === ""
+                ? object.room === props.room && object.typeMessage === "public"
+                : object.typeMessage === "privte" &&
+                  (object.to === props.messageTo ||
+                    object.aouterID === props.messageTo)
+            )
             .map((message_content, index) => {
               if (message_content.aouter === username) {
                 message_content.loc = scrollTo;
                 return (
-                  <Box 
+                  <Box
                     onClick={() => {
                       setWriteName(message_content), setReplyFlag(true);
                     }}
@@ -136,10 +153,10 @@ export default function ChatBody(props) {
                         borderRadius={"8px 17px 0px 0px"}
                       >
                         <Box padding={"0px 25px 0px 0px"}>{"Me"}</Box>
-                        <Box >{message_content.time}</Box>
+                        <Box>{message_content.time}</Box>
                       </Box>
                       {message_content.reply !== null ? (
-                        <Tooltip 
+                        <Tooltip
                           placement="left-start"
                           title={message_content.reply.message}
                         >
@@ -239,9 +256,9 @@ export default function ChatBody(props) {
         <Box
           display={"flex"}
           flexDirection={"row"}
-          sx={{borderRadius:"0px 0px 7px 7px"}}
+          sx={{ borderRadius: "0px 0px 7px 7px" }}
           bgcolor={theme.palette.chat.navBar}
-          height={"10vh"}
+          height={"12vh"}
         >
           <Input
             multiline={true}
@@ -250,8 +267,7 @@ export default function ChatBody(props) {
               padding: "0 5px 0 20px",
               margin: "1px",
               width: "90%",
-              "&::-webkit-scrollbar": {width: "5px"
-              },
+              "&::-webkit-scrollbar": { width: "5px" },
             }}
             disableUnderline={true}
             placeholder="message"

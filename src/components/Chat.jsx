@@ -58,10 +58,16 @@ export default function Chat() {
     }
   };
 
-
   return (
-    <Box sx={{ flexGrow: 1,width:"100vw" }}>
-      <AppBar position="static" sx={{ bgcolor: "#0A0A1B" }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        maxWidth: "100%",
+        height: "100vh",
+        bgcolor: "#21213E",
+      }}
+    >
+      <AppBar position="static" sx={{ height: "8vh", bgcolor: "#0A0A1B" }}>
         <Toolbar>
           <IconButton
             sx={{ display: { xs: "flex", md: "none" }, mr: 2, color: "gold" }}
@@ -70,13 +76,19 @@ export default function Chat() {
             aria-label="open drawer"
             onClick={handleChangeScreen}
           >
-            <MenuIcon />
-              </IconButton>
+            <MenuIcon
+              sx={
+                !changeScreen
+                  ? { transform: "rotate(0deg)" }
+                  : { transform: "rotate(90deg)" }
+              }
+            />
+          </IconButton>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{ display: { xs: "none", sm: "block", color: "gold" } }}
           >
             Chat Live - JLM | {username}
           </Typography>
@@ -89,32 +101,65 @@ export default function Chat() {
               color="inherit"
             >
               <Badge badgeContent={3} color="error">
-                <NotificationsIcon />
+                <NotificationsIcon sx={{ color: "gold" }} />
               </Badge>
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
-
-      {!changeScreen && (
-        <Box sx={{ display: "flex", flexDirection: "row", bgcolor: "#21213E" }}>
+      <Box
+        sx={{
+          display: { xs: "none", md: "flex" },
+          padding: "1vh",
+          flexDirection: "row",
+          bgcolor: "#21213E",
+          height: "80vh",
+        }}
+      >
+        <Box
+          sx={{
+            height: "80vh",
+            width: "15%",
+            color: "gold",
+            padding: "1vh",
+            display: { xs: "none", md: "flex" },
+          }}
+        >
+          <ImageAvatars
+            messageTo={handleMessageTo}
+            signMessageTo={messageTo}
+            username={username}
+            users={userList}
+          />
+        </Box>
+        <Box
+          sx={{
+            height: "80vh",
+            width: "15%",
+            color: "gold",
+            padding: "1vh",
+            display: { xs: "none", md: "flex" },
+          }}
+        >
+          <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
+        </Box>
+        <Box
+          sx={{
+            color: "gold",
+            md: "flex",
+            padding: "1vh",
+            width: "100vw",
+            height: "80vh",
+          }}
+        >
           <Box
-            sx={{ color: "gold", mr: 2, display: { xs: "none", md: "flex" } }}
+            sx={{
+              border: "2px gold solid",
+              borderRadius: "7px",
+            }}
           >
-            <ImageAvatars
-              messageTo={handleMessageTo}
-              signMessageTo={messageTo}
-              username={username}
-              users={userList}
-            />
-          </Box>
-          <Box
-            sx={{ color: "gold", mr: 2, display: { xs: "none", md: "flex" } }}
-          >
-            <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
-          </Box>
-          <Box sx={{ width: "100vw", color: "gold", mr: 2, md: "flex" }}>
-            <ChatBody sx={{height: "100vw"}}
+            <ChatBody
+              bigScreen={true}
               socket={socket}
               users={userList}
               messageTo={messageTo}
@@ -124,11 +169,61 @@ export default function Chat() {
             />
           </Box>
         </Box>
+      </Box>
+
+      {!changeScreen && (
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" },
+            // padding: "1vh",
+            flexDirection: "row",
+            bgcolor: "#21213E",
+            height: "80vh",
+          }}
+        >
+          <Box
+            sx={{
+              color: "gold",
+              md: "flex",
+              // padding: "1vh",
+              width: "100vw",
+              height: "80vh",
+            }}
+          >
+            <Box>
+              <ChatBody
+                gitScreen={false}
+                socket={socket}
+                users={userList}
+                messageTo={messageTo}
+                userToken={userToken}
+                username={username}
+                room={room}
+              />
+            </Box>
+          </Box>
+        </Box>
       )}
 
       {changeScreen && (
-        <Box sx={{ display: "flex", flexDirection: "row", bgcolor: "#21213E" }}>
-          <Box sx={{ color: "gold", mr: 2, display: "flex" }}>
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" },
+            flexDirection: "row",
+            justifyContent: "center",
+            bgcolor: "#21213E",
+          }}
+        >
+          <Box
+            borderRight={"2px #F6C927 solid"}
+            sx={{
+              color: "gold",
+              width: "50vw",
+              // padding: "1vh",
+              display: { xs: "flex", md: "none" },
+              justifyContent: "right",
+            }}
+          >
             <ImageAvatars
               messageTo={handleMessageTo}
               signMessageTo={messageTo}
@@ -136,7 +231,14 @@ export default function Chat() {
               users={userList}
             />
           </Box>
-          <Box sx={{ color: "gold", mr: 2, display: "flex" }}>
+          <Box
+            sx={{
+              color: "gold",
+              width: "50vw",
+              // padding: "1vh",
+              display: "flex",
+            }}
+          >
             <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
           </Box>
         </Box>
