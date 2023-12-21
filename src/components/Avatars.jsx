@@ -35,12 +35,12 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export function ReAvatar(props) {
   return <StyledBadge
-    sx={{margin:'2px', padding:'2px'}}
+    sx={{ margin: '2px', padding: '2px' }}
     overlap="circular"
     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     variant={true ? "dot" : "standart"}
   >
-    <Avatar/>
+    <Avatar />
   </StyledBadge>;
 }
 
@@ -50,7 +50,7 @@ export default function ImageAvatars(props) {
     <Stack
 
       margin={"1vh"}
-      height={"89vh"}
+      height={"84vh"}
       width={"24vh"}
       padding={"2vh"}
       display={"flex"}
@@ -76,23 +76,23 @@ export default function ImageAvatars(props) {
         },
       }}
     >
-        {props.users.filter((object)=> object.userName!==props.username).map((object,index) => (
-            <StyledBadge
-              key={index}
-              nameid= {object.nameID}
-              sx={{color:"gold"}}
-              
-              onDoubleClick={()=>alert("hello")}
-              onClick={() => props.messageTo(object)}
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant={object.status === "connect" ? "dot" : "standart"}
-            >{object.userName}
-              <Avatar alt={object.userName} 
-                      sx={{marginLeft:"2vh",border:"2px gold solid", bgcolor:object.nameID === props.signMessageTo?"tomato":"lightblue"}}>
-                        </Avatar>
-            </StyledBadge>
-          ))}
+      {props.users.filter((object) => object.userName !== props.username).map((object, index) => (
+        <StyledBadge
+          key={index}
+          nameid={object.nameID}
+          sx={{ color: "gold" }}
+
+          onDoubleClick={() => alert("hello")}
+          onClick={() => props.messageTo(object)}
+          overlap="circular"
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          variant={object.status === "connect" ? "dot" : "standart"}
+        >{object.userName}
+          <Avatar alt={object.userName}
+            sx={{ marginLeft: "2vh", border: "2px gold solid", bgcolor: object.nameID === props.signMessageTo ? "tomato" : "lightblue" }}>
+          </Avatar>
+        </StyledBadge>
+      ))}
     </Stack>
   );
 }

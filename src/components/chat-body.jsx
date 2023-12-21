@@ -91,18 +91,18 @@ export default function ChatBody(props) {
   return (
     <div>
       <Box
-        sx={
-          props.bigScreen
-            ? { height: "85vh", display: "flex", flexDirection: "column" }
-            : { height: "92vh", display: "flex", flexDirection: "column" }
-        }
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: !props.bigScreen ? "85.5vh" : { xs: "92vh", md: "85.5vh" }
+        }}
       >
         <Box
           id="chat-box"
           color={"black"}
           sx={{
-            height: "85vh",
-            borderRadius: "7px 7px 0px 0px",
+            height: "80vh",
+            borderRadius: { xs: "none", md: "7px 7px 0px 0px" },
             bgcolor: "#32324E",
             color: "#ffffff",
             overflow: "auto",
@@ -122,8 +122,8 @@ export default function ChatBody(props) {
               props.messageTo === ""
                 ? object.room === props.room && object.typeMessage === "public"
                 : object.typeMessage === "privte" &&
-                  (object.to === props.messageTo ||
-                    object.aouterID === props.messageTo)
+                (object.to === props.messageTo ||
+                  object.aouterID === props.messageTo)
             )
             .map((message_content, index) => {
               if (message_content.aouter === username) {
@@ -180,6 +180,10 @@ export default function ChatBody(props) {
                         color={"#000000"}
                         bgcolor={"#ffffff"}
                         borderRadius={"0px 0px 0px 18px"}
+                        sx={{
+                          textAlign: message_content.message[0].charCodeAt() >= 1488 ? "right" : "left",
+                          direction: message_content.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
+                        }}
                       >
                         {message_content.message}
                       </Box>
@@ -243,6 +247,10 @@ export default function ChatBody(props) {
                         color={"black"}
                         bgcolor={"#ffffff"}
                         borderRadius={"0px 0px 13px 0px"}
+                        sx={{
+                          textAlign: message_content.message[0].charCodeAt() >= 1488 ? "right" : "left",
+                          direction: message_content.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
+                        }}
                       >
                         {message_content.message}
                       </Box>
@@ -252,11 +260,10 @@ export default function ChatBody(props) {
               }
             })}
         </Box>
-
         <Box
           display={"flex"}
           flexDirection={"row"}
-          sx={{ borderRadius: "0px 0px 7px 7px" }}
+          sx={{ borderRadius: { xs: "none", md: "0px 0px 7px 7px" } }}
           bgcolor={theme.palette.chat.navBar}
           height={"12vh"}
         >
@@ -267,8 +274,12 @@ export default function ChatBody(props) {
               padding: "0 5px 0 20px",
               margin: "1px",
               width: "90%",
+              textAlign: message==""? "left":message[0].charCodeAt() < 1488 ? "left" : "right",
+              direction: message==""? "ltr":message[0].charCodeAt() < 1488 ? "ltr" : "rtl",
               "&::-webkit-scrollbar": { width: "5px" },
+              
             }}
+
             disableUnderline={true}
             placeholder="message"
             inputProps={{ style: { color: "#ffffff" } }}

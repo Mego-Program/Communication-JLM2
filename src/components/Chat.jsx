@@ -14,15 +14,18 @@ import ChatBody from "./chat-body";
 import ImageAvatars from "./Avatars";
 import Rooms from "./Rooms";
 
+
 // const socket = io.connect("https://jlm-com-server-2.onrender.com/");
 const socket = io.connect("http://localhost:3001");
-const userToken = localStorage.getItem("token");
+const userToken = localStorage.getItem("userDetails");
+console.log("token from local storage:", userToken)
+console.log('z'.charCodeAt())
+console.log('א'.charCodeAt())
 
 export default function Chat() {
   const [roomList, setRoomList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [messageTo, setMessageTo] = useState("");
-
   const [changeScreen, setChangeScreen] = useState(false);
 
   const handleChangeScreen = () => {
@@ -67,8 +70,8 @@ export default function Chat() {
         bgcolor: "#21213E",
       }}
     >
-      <AppBar position="static" sx={{ height: "8vh", bgcolor: "#0A0A1B" }}>
-        <Toolbar>
+      <AppBar position="static" sx={{ height: "10vh", bgcolor: "#0A0A1B",padding:"1h" }}>
+        <Toolbar sx={{ height: "10vh",padding:"2h"}}>
           <IconButton
             sx={{ display: { xs: "flex", md: "none" }, mr: 2, color: "gold" }}
             size="large"
@@ -109,119 +112,23 @@ export default function Chat() {
       </AppBar>
       <Box
         sx={{
-          display: { xs: "none", md: "flex" },
-          padding: "1vh",
+          display: "flex",
+          padding: { md: "1vh", xs: "0vh" },
           flexDirection: "row",
           bgcolor: "#21213E",
-          height: "80vh",
+          height: "90vh",
+
         }}
       >
-        <Box
-          sx={{
-            height: "80vh",
-            width: "15%",
-            color: "gold",
-            padding: "1vh",
-            display: { xs: "none", md: "flex" },
-          }}
-        >
-          <ImageAvatars
-            messageTo={handleMessageTo}
-            signMessageTo={messageTo}
-            username={username}
-            users={userList}
-          />
-        </Box>
-        <Box
-          sx={{
-            height: "80vh",
-            width: "15%",
-            color: "gold",
-            padding: "1vh",
-            display: { xs: "none", md: "flex" },
-          }}
-        >
-          <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
-        </Box>
-        <Box
-          sx={{
-            color: "gold",
-            md: "flex",
-            padding: "1vh",
-            width: "100vw",
-            height: "80vh",
-          }}
-        >
           <Box
             sx={{
-              border: "2px gold solid",
-              borderRadius: "7px",
-            }}
-          >
-            <ChatBody
-              bigScreen={true}
-              socket={socket}
-              users={userList}
-              messageTo={messageTo}
-              userToken={userToken}
-              username={username}
-              room={room}
-            />
-          </Box>
-        </Box>
-      </Box>
-
-      {!changeScreen && (
-        <Box
-          sx={{
-            display: { xs: "flex", md: "none" },
-            // padding: "1vh",
-            flexDirection: "row",
-            bgcolor: "#21213E",
-            height: "80vh",
-          }}
-        >
-          <Box
-            sx={{
+              borderRight: "2px #F6C927 solid",
+              height: "86vh",
+              width: !changeScreen ? "15%" : { md: "15%", xs: "50vw" },
               color: "gold",
-              md: "flex",
-              // padding: "1vh",
-              width: "100vw",
-              height: "80vh",
-            }}
-          >
-            <Box>
-              <ChatBody
-                gitScreen={false}
-                socket={socket}
-                users={userList}
-                messageTo={messageTo}
-                userToken={userToken}
-                username={username}
-                room={room}
-              />
-            </Box>
-          </Box>
-        </Box>
-      )}
-
-      {changeScreen && (
-        <Box
-          sx={{
-            display: { xs: "flex", md: "none" },
-            flexDirection: "row",
-            justifyContent: "center",
-            bgcolor: "#21213E",
-          }}
-        >
-          <Box
-            borderRight={"2px #F6C927 solid"}
-            sx={{
-              color: "gold",
-              width: "50vw",
-              // padding: "1vh",
-              display: { xs: "flex", md: "none" },
-              justifyContent: "right",
+              padding: "1vh",
+              margin: "1vh",
+              display: !changeScreen ? { xs: "none", md: "flex" } : "flex",
             }}
           >
             <ImageAvatars
@@ -233,16 +140,44 @@ export default function Chat() {
           </Box>
           <Box
             sx={{
+              height: "86vh",
+              width: !changeScreen ? "17.65%" : { md: "17.65%", xs: "50vw" },
               color: "gold",
-              width: "50vw",
-              // padding: "1vh",
-              display: "flex",
+              padding: "1vh",
+              margin: "1vh",
+              display: !changeScreen ? { xs: "none", md: "flex" } : "flex",
             }}
           >
             <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
           </Box>
+        <Box
+          sx={{
+            color: "gold",
+            padding: { md: "1vh", xs: "0vh" },
+            width: "100%",
+            height: "88vh",
+            display: !changeScreen ? "block" : { md: "block", xs: "none" }
+          }}
+        >
+          <Box
+            sx={{
+              border: { md: "0.25vh gold solid", xs: "none" },
+              borderRadius: { md: "1vh", xs: "none" },
+              height: "86vh",
+            }}
+          >
+            <ChatBody
+              bigScreen={!changeScreen}
+              socket={socket}
+              users={userList}
+              messageTo={messageTo}
+              userToken={userToken}
+              username={username}
+              room={room}
+            />
+          </Box>
         </Box>
-      )}
+      </Box>
     </Box>
   );
 }
