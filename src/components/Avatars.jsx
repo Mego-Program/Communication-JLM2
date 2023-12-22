@@ -1,7 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import { Button } from "react-scroll";
 import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 
@@ -36,35 +35,28 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export function ReAvatar(props) {
   return <StyledBadge
-    sx={{margin:'2px', padding:'2px'}}
+    sx={{ margin: '2px', padding: '2px' }}
     overlap="circular"
     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     variant={true ? "dot" : "standart"}
   >
-    <Avatar/>
+    <Avatar />
   </StyledBadge>;
 }
 
 export default function ImageAvatars(props) {
-  const socket = props.socket;
-
-  const joinRoom = (object) => {
-    socket.emit("join_room", object.roomID);
-    props.room(object.roomID);
-  };
 
   return (
     <Stack
-      border={"2px #F6C927 solid"}
+
       margin={"1vh"}
-      borderRadius={"7px"}
-      height={"80vh"}
-      width={"12vh"}
+      height={"84vh"}
+      width={"24vh"}
+      padding={"2vh"}
       display={"flex"}
       flexDirection={"column"}
-      justifyContent={"center"}
-      alignItems={"center"}
-      spacing={1}
+      alignItems={"end"}
+      spacing={0.5}
       sx={{
         color: "#ffffff",
         display: "flex",
@@ -84,28 +76,23 @@ export default function ImageAvatars(props) {
         },
       }}
     >
-      {" "}
-      {props.className === "users"
-        ? props.users.filter((object)=> object.userName!==props.username).map((object) => (
-            <StyledBadge
-              key={object.nameID}
-              onClick={() => props.messageTo(object)}
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant={object.status === "connect" ? "dot" : "standart"}
-            >
-              <Avatar alt={object.userName} sx={{bgcolor:object.nameID === props.signMessageTo?"tomato":"lightblue"}}>{object.userName[0]}</Avatar>
-            </StyledBadge>
-          ))
-        : props.rooms.map((object, index) => (
-            <Button
-              index={index}
-              key={object.roomID}
-              onClick={() => joinRoom(object)}
-            >{object.roomName}
-            </Button>
-          ))}
-      {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
+      {props.users.filter((object) => object.userName !== props.username).map((object, index) => (
+        <StyledBadge
+          key={index}
+          nameid={object.nameID}
+          sx={{ color: "gold" }}
+
+          onDoubleClick={() => alert("hello")}
+          onClick={() => props.messageTo(object)}
+          overlap="circular"
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          variant={object.status === "connect" ? "dot" : "standart"}
+        >{object.userName}
+          <Avatar alt={object.userName}
+            sx={{ marginLeft: "2vh", border: "2px gold solid", bgcolor: object.nameID === props.signMessageTo ? "tomato" : "lightblue" }}>
+          </Avatar>
+        </StyledBadge>
+      ))}
     </Stack>
   );
 }
