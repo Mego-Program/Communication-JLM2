@@ -13,14 +13,14 @@ import { useState, useEffect } from "react";
 import ChatBody from "./chat-body";
 import ImageAvatars from "./Avatars";
 import Rooms from "./Rooms";
+import GroupSizesColors from "./RoomSetting.jsx";
 
-
-// const socket = io.connect("https://jlm-com-server-2.onrender.com/");
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://jlm-com-server-2.onrender.com/");
+// const socket = io.connect("http://localhost:3001");
 const userToken = localStorage.getItem("userDetails");
 console.log("token from local storage:", userToken)
-console.log('z'.charCodeAt())
-console.log('א'.charCodeAt())
+
+const localStorageForMe = { "_id": "6582effe8cbc3c4e7dc544bb", "firstName": "nissim", "lastName": "amsallem", "userName": "nissim amsallem", "password": "hbgfcuyguihughvghvjhb", "email": "nissimamsallem@gmail.com", "img": "https://lh3.googleusercontent.com/a/ACg8ocKATfTMFDPA-hw0egXzaE98_mVN_g1YLnDE8AzjytQETgI=s96-c", "__v": 0 }
 
 export default function Chat() {
   const [roomList, setRoomList] = useState([]);
@@ -46,18 +46,19 @@ export default function Chat() {
     };
   }, [socket]);
 
-  const [room, setRoom] = useState("");
-  const username = "nissim";
+  const [room, setRoom] = useState("main room");
+  const [statusRoom, setStatusRoom] = useState("open")
+  const username = localStorageForMe.userName;
 
   const handleRoom = (selectRoom) => {
     setRoom(selectRoom);
   };
 
   const handleMessageTo = (props) => {
-    if (messageTo == props.nameID) {
+    if (messageTo == props.userName) {
       setMessageTo("");
     } else {
-      setMessageTo(props.nameID);
+      setMessageTo(props.userName);
     }
   };
 
@@ -70,8 +71,8 @@ export default function Chat() {
         bgcolor: "#21213E",
       }}
     >
-      <AppBar position="static" sx={{ height: "10vh", bgcolor: "#0A0A1B",padding:"1h" }}>
-        <Toolbar sx={{ height: "10vh",padding:"2h"}}>
+      <AppBar position="static" sx={{ height: "10vh", bgcolor: "#0A0A1B", padding: "1h" }}>
+        <Toolbar sx={{ height: "10vh", padding: "2h" }}>
           <IconButton
             sx={{ display: { xs: "flex", md: "none" }, mr: 2, color: "gold" }}
             size="large"
@@ -117,46 +118,62 @@ export default function Chat() {
           flexDirection: "row",
           bgcolor: "#21213E",
           height: "90vh",
-
         }}
       >
-          <Box
-            sx={{
-              borderRight: "2px #F6C927 solid",
-              height: "86vh",
-              width: !changeScreen ? "15%" : { md: "15%", xs: "50vw" },
-              color: "gold",
-              padding: "1vh",
-              margin: "1vh",
-              display: !changeScreen ? { xs: "none", md: "flex" } : "flex",
-            }}
-          >
-            <ImageAvatars
-              messageTo={handleMessageTo}
-              signMessageTo={messageTo}
-              username={username}
-              users={userList}
-            />
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "88vh",
+          padding: !changeScreen ? "none" : { md: "1vh", xs: "none" },
+          width: !changeScreen ? { md: "30%", xs: "none" } : { md: "30%", xs: "100%" }
+        }}>
+          <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+            height: changeScreen ? { xs: "88%", md: "90%" } : "88%",
+          }}>
+            <Box
+              sx={{
+                borderRight: "2px #F6C927 solid",
+                width: !changeScreen ? "50%" : { md: "50%", xs: "50vw" },
+                color: "gold",
+                margin: "1vh",
+                display: !changeScreen ? { xs: "none", md: "flex" } : "flex",
+              }}
+            >
+              <ImageAvatars
+                messageTo={handleMessageTo}
+                signMessageTo={messageTo}
+                username={username}
+                users={userList}
+              />
+            </Box>
+            <Box
+              sx={{
+                // height: "70vh",
+                // width: !changeScreen ? "50%" : { md: "50%", xs: "50vw" },
+                color: "gold",
+                padding: "1vh",
+                margin: "1vh",
+                display: !changeScreen ? { xs: "none", md: "flex" } : "flex",
+              }}
+            >
+              <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
+            </Box>
           </Box>
-          <Box
-            sx={{
-              height: "86vh",
-              width: !changeScreen ? "17.65%" : { md: "17.65%", xs: "50vw" },
-              color: "gold",
-              padding: "1vh",
-              margin: "1vh",
-              display: !changeScreen ? { xs: "none", md: "flex" } : "flex",
-            }}
+
+          <Box sx={{justifyContent:"center", height: "100%", display: !changeScreen ? { xs: "none", md: "flex" } : "flex", }}
           >
-            <Rooms socket={socket} rooms={roomList} room={handleRoom}></Rooms>
+            <GroupSizesColors userName={localStorageForMe.userName} socket={socket} roomList={roomList} room={room} statusRoom={statusRoom}></GroupSizesColors>
           </Box>
+        </Box>
         <Box
           sx={{
             color: "gold",
             padding: { md: "1vh", xs: "0vh" },
             width: "100%",
             height: "88vh",
-            display: !changeScreen ? "block" : { md: "block", xs: "none" }
+            display: !changeScreen ? "block" : { md: "block", xs: "none" },
           }}
         >
           <Box
@@ -174,6 +191,8 @@ export default function Chat() {
               userToken={userToken}
               username={username}
               room={room}
+              statusRoom={statusRoom}
+              localStorageForMe={localStorageForMe}
             />
           </Box>
         </Box>
