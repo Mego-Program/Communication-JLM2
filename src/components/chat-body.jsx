@@ -11,7 +11,7 @@ function scrollToBottom() {
   });
 }
 
-function scrollTo(goTo) {
+function scrollTo() {
   const element = document.getElementById("chat-box");
   return element.scrollTop;
 }
@@ -25,14 +25,15 @@ export default function ChatBody(props) {
 
   const socket = props.socket;
   const username = props.username;
-  //  const userToken = props.userToken;
-  //  const username = JWT.ecoded
+  const localStorageForMe = props.localStorageForMe
+
 
   const socketWasCalled = React.useRef(false);
 
   useEffect(() => {
     if (socketWasCalled.current) return;
-    socket.emit("upLoadOldmessages", username);
+    socket.emit("me", localStorageForMe)
+    socket.emit("upLoadOldmessages", localStorageForMe);
 
     socketWasCalled.current = true;
   }, []);
@@ -60,7 +61,6 @@ export default function ChatBody(props) {
 
   useEffect(() => {
     socket.on("receive_message", (message) => {
-      console.log(message);
       setMessageReceived((list) => [...list, message]);
       setscrollFlag(true);
     });
@@ -94,14 +94,14 @@ export default function ChatBody(props) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: !props.bigScreen ? "85.5vh" : { xs: "92vh", md: "85.5vh" }
+          height: !props.bigScreen ? "85.5vh" : { xs: "90vh", md: "85.5vh" }
         }}
       >
         <Box
           id="chat-box"
           color={"black"}
           sx={{
-            height: "80vh",
+            height: "90vh",
             borderRadius: { xs: "none", md: "7px 7px 0px 0px" },
             bgcolor: "#32324E",
             color: "#ffffff",
@@ -274,10 +274,9 @@ export default function ChatBody(props) {
               padding: "0 5px 0 20px",
               margin: "1px",
               width: "90%",
-              textAlign: message==""? "left":message[0].charCodeAt() < 1488 ? "left" : "right",
-              direction: message==""? "ltr":message[0].charCodeAt() < 1488 ? "ltr" : "rtl",
+              textAlign: message == "" ? "left" : message[0].charCodeAt() < 1488 ? "left" : "right",
+              direction: message == "" ? "ltr" : message[0].charCodeAt() < 1488 ? "ltr" : "rtl",
               "&::-webkit-scrollbar": { width: "5px" },
-              
             }}
 
             disableUnderline={true}

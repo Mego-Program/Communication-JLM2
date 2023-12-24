@@ -4,14 +4,23 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+
 
 export default function FormDialog(props) {
     const socket = props.socket;
-    const modelRoom = Object.keys(props.modelRoom);
+    // const [roomList,setRoomList] = React.useState([])
+
+    // React.useEffect(() => {
+    //   setRoomList(props.roomList)
+
+    // }, [props.roomList]);
+
+
+    // const modelRoom = Object.keys(roomList[0]);
     const [open, setOpen] = React.useState(false);
-    const [roomData,setRoomData] = React.useState({})
+    const [roomData, setRoomData] = React.useState({})
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -21,16 +30,23 @@ export default function FormDialog(props) {
         setOpen(false);
     };
 
-    const handleFillRoom = (event) =>{
+    const handleFillRoom = (event) => {
         const label = event.target.name;
         const value = event.target.value;
         setRoomData((prevRoomData) => ({ ...prevRoomData, [label]: value }));
+
     }
 
     const handleNewRoom = () => {
-        console.log("get to server",roomData);
-        socket.emit("createRoom", (roomData), (response) => {
-            console.log(response.status);
+
+        const sendData = {}
+        sendData.roomName = roomData.roomName,
+        sendData.owner = props.userName,
+        sendData.team = "all",
+        sendData.status = "open"
+        console.log("get to server", sendData);
+        socket.emit("createRoom", (sendData), (response) => {
+            alert(response.status)
             setRoomData({})
         });
     };
@@ -38,32 +54,29 @@ export default function FormDialog(props) {
     return (
         <React.Fragment>
             <Button
-                sx={{ width: "12vh", marginTop: "20px" }}
-                variant="outlined"
+                sx={{ color: "gold", border: "1px gold solid" }} size={"small"} variant="outlined" startIcon={<AddOutlinedIcon />} key="one"
                 onClick={handleClickOpen}>
-                Oepn New Room
+                New Room
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Welcome</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        In order to open a new room you must fill in the following details.
-                    </DialogContentText>
 
-                    {modelRoom.map((object, index) => (
-                        <TextField
-                            index={index}
-                            key={index}
-                            autoFocus
-                            margin="dense"
-                            className="openRoom"
-                            id={modelRoom[index]}
-                            label={modelRoom[index]}
-                            name={modelRoom[index]}
-                            variant="standard"
-                            onChange={handleFillRoom}
-                        />
-                    ))}
+
+
+                    <TextField
+                        index={2}
+                        key={2}
+                        autoFocus
+                        margin="dense"
+                        className="openRoom"
+                        id="roomName"
+                        label="enter room name..."
+                        name="roomName"
+                        variant="standard"
+                        onChange={handleFillRoom}
+                    />
+
                 </DialogContent>
                 <DialogActions>
                     <Button sx={{ bgcolor: "#31213E" }} onClick={handleClose}>
