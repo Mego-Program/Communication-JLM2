@@ -89,19 +89,18 @@ export default function ChatBody(props) {
   }, [scrollFlag]);
 
   return (
-    <div>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: !props.bigScreen ? "85.5vh" : { xs: "90vh", md: "85.5vh" }
+          height: !props.bigScreen ? "82.5vh" : { xs: "88vh", md: "82.5vh" }
         }}
       >
         <Box
           id="chat-box"
           color={"black"}
           sx={{
-            height: "90vh",
+            height: "100%",
             borderRadius: { xs: "none", md: "7px 7px 0px 0px" },
             bgcolor: "#32324E",
             color: "#ffffff",
@@ -300,6 +299,5 @@ export default function ChatBody(props) {
           />
         </Box>
       </Box>
-    </div>
   );
 }

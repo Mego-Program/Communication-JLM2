@@ -84,19 +84,20 @@ export default function ImageAvatars(props) {
       {props.users.filter((object) => object.userName !== props.username).map((object, index) => (
         <Box
           key={index}
-          sx={{width: "100%", borderBottom: "1px gold solid", color: "gold" }}
+          sx={{ width: "100%", borderBottom: "1px gold solid", color:object.userName === props.signMessageTo ?"tomato": "gold" }}
         >
           <Tooltip title={object.userName}>
             <StyledBadge
               username={object.userName}
-              sx={{ width: "100%", justifyContent: "right",fontSize: "75%", overflow: "hidden", textAlign:"center", textJustify:"auto" ,alignItems: "center", height: "56px" }}
-              // onClick={() => props.messageTo(object)}
+              sx={{ width: "100%", justifyContent: "right", fontSize: "75%", overflow: "hidden", textAlign: "center", textJustify: "auto", alignItems: "center", height: "56px" }}
+              onClick={() => props.messageTo(object)}
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               variant={object.status === "connect" ? "dot" : "standart"}
             >{object.firstName} {object.lastName}
-              <Avatar onClick={() => props.messageTo(object)} alt={object.userName}
-                sx={{ marginLeft: "2vh", border: "2px gold solid", bgcolor: object.userName === props.signMessageTo ? "tomato" : "lightblue" }}>
+              <Avatar 
+                src={object.img}
+                sx={{ marginLeft: "2vh", border:object.userName === props.signMessageTo ? "2px tomato solid" : "2px gold solid", bgcolor: object.userName === props.signMessageTo ? "tomato" : "block" }}>
               </Avatar>
             </StyledBadge>
           </Tooltip>
