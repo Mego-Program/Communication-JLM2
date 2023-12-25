@@ -15,12 +15,18 @@ import ImageAvatars from "./Avatars";
 import Rooms from "./Rooms";
 import GroupSizesColors from "./RoomSetting.jsx";
 
-const socket = io.connect("https://jlm-com-server-2.onrender.com/");
-// const socket = io.connect("http://localhost:3001");
-const userToken = localStorage.getItem("userDetails");
-console.log("token from local storage:", userToken)
+let socket;
+let localStorageForMe;
 
-const localStorageForMe = { "_id": "6582effe8cbc3c4e7dc544bb", "firstName": "nissim", "lastName": "amsallem", "userName": "nissim amsallem", "password": "hbgfcuyguihughvghvjhb", "email": "nissimamsallem@gmail.com", "img": "https://lh3.googleusercontent.com/a/ACg8ocKATfTMFDPA-hw0egXzaE98_mVN_g1YLnDE8AzjytQETgI=s96-c", "__v": 0 }
+if (process.env.NODE_ENV === "production") {
+  socket = io.connect("https://jlm-com-server-2.onrender.com/")
+  localStorageForMe = localStorage.getItem("userDetails");
+}
+else {
+  socket = io.connect("http://localhost:3001");
+  localStorageForMe = { "_id": "6582effe8cbc3c4e7dc544bb", "firstName": "nissim", "lastName": "amsallem", "userName": "nissim amsallem", "password": "hbgfcuyguihughvghvjhb", "email": "nissimamsallem@gmail.com", "img": "https://lh3.googleusercontent.com/a/ACg8ocKATfTMFDPA-hw0egXzaE98_mVN_g1YLnDE8AzjytQETgI=s96-c", "__v": 0 }
+}
+console.log("token from local storage:", localStorageForMe)
 
 export default function Chat() {
   const [roomList, setRoomList] = useState([]);
@@ -67,12 +73,12 @@ export default function Chat() {
       sx={{
         flexGrow: 1,
         maxWidth: "100%",
-        height: "100vh",
+        height: "100%",
         bgcolor: "#21213E",
       }}
     >
-      <AppBar position="static" sx={{ height: "10vh", bgcolor: "#0A0A1B", padding: "1h" }}>
-        <Toolbar sx={{ height: "10vh", padding: "2h" }}>
+      <AppBar position="static" sx={{ height: "8%", bgcolor: "#0A0A1B", padding: "1h" }}>
+        <Toolbar sx={{ padding: "2h" }}>
           <IconButton
             sx={{ display: { xs: "flex", md: "none" }, mr: 2, color: "gold" }}
             size="large"
@@ -117,20 +123,19 @@ export default function Chat() {
           padding: { md: "1vh", xs: "0vh" },
           flexDirection: "row",
           bgcolor: "#21213E",
-          height: "90vh",
         }}
       >
         <Box sx={{
           display: "flex",
           flexDirection: "column",
-          height: "88vh",
           padding: !changeScreen ? "none" : { md: "1vh", xs: "none" },
-          width: !changeScreen ? { md: "30%", xs: "none" } : { md: "30%", xs: "100%" }
+          width: !changeScreen ? { md: "30%", xs: "none" } : { md: "30%", xs: "100%" },
+
         }}>
           <Box sx={{
             display: "flex",
             flexDirection: "row",
-            height: changeScreen ? { xs: "88%", md: "90%" } : "88%",
+            height: "80%"
           }}>
             <Box
               sx={{
@@ -150,8 +155,6 @@ export default function Chat() {
             </Box>
             <Box
               sx={{
-                // height: "70vh",
-                // width: !changeScreen ? "50%" : { md: "50%", xs: "50vw" },
                 color: "gold",
                 padding: "1vh",
                 margin: "1vh",
@@ -162,7 +165,7 @@ export default function Chat() {
             </Box>
           </Box>
 
-          <Box sx={{justifyContent:"center", height: "100%", display: !changeScreen ? { xs: "none", md: "flex" } : "flex", }}
+          <Box sx={{ justifyContent: "center", display: !changeScreen ? { xs: "none", md: "flex" } : "flex", }}
           >
             <GroupSizesColors userName={localStorageForMe.userName} socket={socket} roomList={roomList} room={room} statusRoom={statusRoom}></GroupSizesColors>
           </Box>
@@ -172,7 +175,7 @@ export default function Chat() {
             color: "gold",
             padding: { md: "1vh", xs: "0vh" },
             width: "100%",
-            height: "88vh",
+            height: "80%",
             display: !changeScreen ? "block" : { md: "block", xs: "none" },
           }}
         >
@@ -180,7 +183,7 @@ export default function Chat() {
             sx={{
               border: { md: "0.25vh gold solid", xs: "none" },
               borderRadius: { md: "1vh", xs: "none" },
-              height: "86vh",
+
             }}
           >
             <ChatBody
@@ -188,7 +191,7 @@ export default function Chat() {
               socket={socket}
               users={userList}
               messageTo={messageTo}
-              userToken={userToken}
+
               username={username}
               room={room}
               statusRoom={statusRoom}
