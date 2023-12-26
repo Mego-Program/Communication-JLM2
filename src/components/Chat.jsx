@@ -13,14 +13,14 @@ import { useState, useEffect } from "react";
 import ChatBody from "./chat-body";
 import ImageAvatars from "./Avatars";
 import Rooms from "./Rooms";
-import GroupSizesColors from "./RoomSetting.jsx";
+import GroupSizesColors from "./RoomSetting.jsx"
 
 let socket;
 let localStorageForMe;
 
 if (process.env.NODE_ENV === "production") {
   socket = io.connect("https://jlm-com-server-2.onrender.com/")
-  localStorageForMe = JSON.stringify(localStorage.getItem("userDetails"));
+  localStorageForMe = json.parse(JSON.stringify(localStorage.getItem("userDetails")));
 }
 else {
   socket = io.connect("http://localhost:3001");
