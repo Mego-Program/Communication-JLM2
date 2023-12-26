@@ -20,7 +20,7 @@ let localStorageForMe;
 
 if (process.env.NODE_ENV === "production") {
   socket = io.connect("https://jlm-com-server-2.onrender.com/")
-  localStorageForMe = JSON.parse(JSON.stringify(localStorage.getItem("userDetails")));
+  localStorageForMe = JSON.parse(localStorage.getItem("userDetails"));
 }
 else {
   socket = io.connect("http://localhost:3001");
