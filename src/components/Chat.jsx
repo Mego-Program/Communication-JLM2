@@ -20,11 +20,11 @@ let localStorageForMe;
 
 if (process.env.NODE_ENV === "production") {
   socket = io.connect("https://jlm-com-server-2.onrender.com/")
-  localStorageForMe = json.parse(JSON.stringify(localStorage.getItem("userDetails")));
+  localStorageForMe = JSON.parse(JSON.stringify(localStorage.getItem("userDetails")));
 }
 else {
   socket = io.connect("http://localhost:3001");
-  localStorageForMe = { "_id": "6582effe8cbc3c4e7dc544bb", "firstName": "nissim", "lastName": "amsallem", "userName": "nissim amsallem", "password": "hbgfcuyguihughvghvjhb", "email": "nissimamsallem@gmail.com", "img": "https://lh3.googleusercontent.com/a/ACg8ocKATfTMFDPA-hw0egXzaE98_mVN_g1YLnDE8AzjytQETgI=s96-c", "__v": 0 }
+  localStorageForMe = { _id: "6582effe8cbc3c4e7dc544bb", firstName: "nissim", lastName: "amsallem", userName: "nissim amsallem", password: "hbgfcuyguihughvghvjhb", email: "nissimamsallem@gmail.com", img: "https://lh3.googleusercontent.com/a/ACg8ocKATfTMFDPA-hw0egXzaE98_mVN_g1YLnDE8AzjytQETgI=s96-c", __v: 0 }
 }
 console.log("token from local storage:", localStorageForMe)
 
