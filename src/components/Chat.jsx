@@ -187,7 +187,7 @@ export default function Chat() {
             <GroupSizesColors userName={localStorageForMe.userName} socket={socket} roomList={roomList} room={room} statusRoom={statusRoom}></GroupSizesColors>
           </Box>
         </Box>
-        <Box //פצצה
+        <Box
           sx={{
             color: "gold",
             padding: { md: "1vh", xs: "0vh" },
