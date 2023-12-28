@@ -1,11 +1,13 @@
 import Chat from "./components/Chat";
-import { CssBaseline } from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 
-export default  function App() {
+export default  function App(props) {
+
+  console.log(props.sx)
   return (
-    <div>
+    <Box sx={{ height:'100vh', overflow:'hidden'}}>
       <CssBaseline/>
       <Chat/>
-    </div>
+    </Box>
   )
 }

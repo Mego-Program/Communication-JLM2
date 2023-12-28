@@ -23,10 +23,10 @@ export default function GroupSizesColors(props) {
   return (
     <Box
       sx={{
-        justifyContent: "center",
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        height:"100%",
       }}
     >
       <FormDialog userName={props.userName} socket={socket} roomList={roomList} sx={{ color: "gold", border: "1px gold solid" }} size={"small"} variant="outlined" startIcon={<AddOutlinedIcon />} key="one">new room</FormDialog>

@@ -93,7 +93,9 @@ export default function ChatBody(props) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: !props.bigScreen ? "82.5vh" : { xs: "88vh", md: "82.5vh" }
+          // height: !props.bigScreen ? "80%" : { xs: "88%", md: "80%" },
+          height:"100%",
+
         }}
       >
         <Box
