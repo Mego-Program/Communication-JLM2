@@ -5,7 +5,7 @@ export default  function App(props) {
 
   console.log(props.sx)
   return (
-    <Box sx={{ height:'100vh', overflow:'hidden'}}>
+    <Box sx={{bgcolor:'red', height:'100%'}}>
       <CssBaseline/>
       <Chat/>
     </Box>
