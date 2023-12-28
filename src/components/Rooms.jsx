@@ -23,14 +23,14 @@ export default function VerticalTabs(props) {
     }
 
     return (
-        <Box sx={{ margin: "1vh", flexGrow: 1, color: "white", height: "84vh" }}>
+        <Box sx={{ margin: "1vh", flexGrow: 1, color: "white", height: "100%" }}>
             <Tabs
                 orientation="vertical"
                 variant="scrollable"
                 value={value}
                 onChange={handleChange}
                 aria-label="Vertical tabs example"
-                sx={{ borderRight: 1, color: "white", bgcolor: '#21213E', borderColor: 'divider', justifyContent: "right" }}>
+                sx={{height:"100%",borderRight: 1, color: "white", bgcolor: '#21213E', borderColor: 'divider', justifyContent: "right" }}>
                 {props.rooms.map((object, index) => (
                     // <Box key={index}>
                     //     <Box key={index} sx={{ display: 'flex', flexDirection: "row", justifyContent: "right", alignItems: "center" }}>

@@ -53,16 +53,14 @@ export default function ImageAvatars(props) {
 
   return (
     <Stack
-
       margin={"1vh"}
-      height={"70vh"}
-      width={"100%"}
       padding={"1vh"}
       display={"flex"}
       flexDirection={"column"}
       alignItems={"end"}
-      spacing={0.5}
       sx={{
+        width:"100%",
+        height:"100%",
         color: "#ffffff",
         display: "flex",
         overflow: "auto",
@@ -84,7 +82,7 @@ export default function ImageAvatars(props) {
       {props.users.filter((object) => object.userName !== props.username).map((object, index) => (
         <Box
           key={index}
-          sx={{ width: "100%", borderBottom: "1px gold solid", color:object.userName === props.signMessageTo ?"tomato": "gold" }}
+          sx={{height:"100%", width: "100%", borderBottom: "1px gold solid", color:object.userName === props.signMessageTo ?"tomato": "gold" }}
         >
           <Tooltip title={object.userName}>
             <StyledBadge
