@@ -32,21 +32,17 @@ export default function ChatBody(props) {
 
   useEffect(() => {
     if (socketWasCalled.current) return;
-    socket.emit("me", localStorageForMe)
     socket.emit("upLoadOldmessages", localStorageForMe);
 
     socketWasCalled.current = true;
   }, []);
 
   const sendMessage = async () => {
-    if (
-      (message.trim(" ") && username.trim(" ") && props.room !== "") ||
-      props.messageTo !== ""
-    ) {
+    if (message.trim(" ") && (props.room !== "" || props.messageTo !== "")) {
       const messageData = {
         to: props.messageTo,
         typeMessage: props.messageTo === "" ? "public" : "privte",
-        room: props.room,
+        room: props.messageTo === "" ? props.room : "",
         aouter: username,
         message: message,
         time: new Date().toLocaleTimeString(),
@@ -54,7 +50,6 @@ export default function ChatBody(props) {
       };
       setReplyFlag(false);
       await socket.emit("send_message", messageData);
-
       setMessage("");
     }
   };
@@ -89,217 +84,214 @@ export default function ChatBody(props) {
   }, [scrollFlag]);
 
   return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+    >
       <Box
+        id="chat-box"
+        color={"black"}
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          // height: !props.bigScreen ? "80%" : { xs: "88%", md: "80%" },
-          height:"100%",
-
+          height: "100%",
+          borderRadius: { xs: "none", md: "7px 7px 0px 0px" },
+          bgcolor: "#32324E",
+          color: "#ffffff",
+          overflow: "auto",
+          "&::-webkit-scrollbar": { width: "10px" },
+          "&::-webkit-scrollbar-track": {
+            boxShadow: "inset 0 0 5px silver;",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "gold",
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": { background: "#b30000" },
         }}
       >
-        <Box
-          id="chat-box"
-          color={"black"}
-          sx={{
-            height: "100%",
-            borderRadius: { xs: "none", md: "7px 7px 0px 0px" },
-            bgcolor: "#32324E",
-            color: "#ffffff",
-            overflow: "auto",
-            "&::-webkit-scrollbar": { width: "10px" },
-            "&::-webkit-scrollbar-track": {
-              boxShadow: "inset 0 0 5px silver;",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              background: "gold",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": { background: "#b30000" },
-          }}
-        >
-          {messageReceived
-            .filter((object) =>
-              props.messageTo === ""
-                ? object.room === props.room && object.typeMessage === "public"
-                : object.typeMessage === "privte" &&
-                (object.to === props.messageTo ||
-                  object.aouterID === props.messageTo)
-            )
-            .map((message_content, index) => {
-              if (message_content.aouter === username) {
-                message_content.loc = scrollTo;
-                return (
-                  <Box
-                    onClick={() => {
-                      setWriteName(message_content), setReplyFlag(true);
-                    }}
-                    key={index}
-                    display="flex"
-                    justifyContent="right"
-                    margin={"10px 10px 10px 70px"}
-                  >
-                    <Stack
-                      border={"2px gray solid"}
-                      borderRadius={"10px 20px 0px 20px "}
-                    >
-                      <Box
-                        display={"flex"}
-                        flexDirection={"row"}
-                        justifyContent={"space-between"}
-                        fontSize="10px"
-                        padding="3px 15px 3px 3px"
-                        sx={{ bgcolor: "blue", width: "100%" }}
-                        borderBottom={"2px gray solid"}
-                        borderRadius={"8px 17px 0px 0px"}
-                      >
-                        <Box padding={"0px 25px 0px 0px"}>{"Me"}</Box>
-                        <Box>{message_content.time}</Box>
-                      </Box>
-                      {message_content.reply !== null ? (
-                        <Tooltip
-                          placement="left-start"
-                          title={message_content.reply.message}
-                        >
-                          <Box
-                            fontSize="10px"
-                            id="reply"
-                            padding="2px 10px"
-                            color={"#FFFFFF"}
-                            bgcolor={"#000000"}
-                            borderBottom={"1px gray solid"}
-                          >
-                            reply to {message_content.reply.aouter}
-                          </Box>
-                        </Tooltip>
-                      ) : (
-                        <></>
-                      )}
-                      <Box
-                        id="content"
-                        padding="2px 10px"
-                        color={"#000000"}
-                        bgcolor={"#ffffff"}
-                        borderRadius={"0px 0px 0px 18px"}
-                        sx={{
-                          textAlign: message_content.message[0].charCodeAt() >= 1488 ? "right" : "left",
-                          direction: message_content.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
-                        }}
-                      >
-                        {message_content.message}
-                      </Box>
-                    </Stack>
-                  </Box>
-                );
-              } else {
-                return (
-                  <Box
-                    key={index}
-                    onClick={() => {
-                      setWriteName(message_content), setReplyFlag(true);
-                    }}
-                    display="flex"
-                    margin={"10px 70px 10px 10px"}
-                  >
-                    <Stack
-                      border={"2px gray solid"}
-                      borderRadius={"15px 7px 15px 0px"}
-                    >
-                      <Box
-                        display={"flex"}
-                        flexDirection={"row"}
-                        justifyContent={"space-between"}
-                        fontSize="10px"
-                        padding="5px"
-                        sx={{
-                          bgcolor: "purple",
-                          width: "100%",
-                          borderRadius: "13px 5px 0px 0px",
-                        }}
-                        borderBottom={"2px gray solid"}
-                      >
-                        <Box padding={"0px 25px 0px 0px"}>
-                          {message_content.aouter}
-                        </Box>
-                        <Box>{message_content.time}</Box>
-                      </Box>
-                      {message_content.reply !== null ? (
-                        <Tooltip
-                          placement="right-start"
-                          title={message_content.reply.message}
-                        >
-                          <Box
-                            fontSize="10px"
-                            id="reply"
-                            padding="2px 10px"
-                            color={"#FFFFFF"}
-                            bgcolor={"#000000"}
-                            borderBottom={"1px gray solid"}
-                          >
-                            reply to {message_content.reply.aouter}
-                          </Box>
-                        </Tooltip>
-                      ) : (
-                        <></>
-                      )}
-                      <Box
-                        padding={"0px 5px 0px 10px"}
-                        display={"flex"}
-                        color={"black"}
-                        bgcolor={"#ffffff"}
-                        borderRadius={"0px 0px 13px 0px"}
-                        sx={{
-                          textAlign: message_content.message[0].charCodeAt() >= 1488 ? "right" : "left",
-                          direction: message_content.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
-                        }}
-                      >
-                        {message_content.message}
-                      </Box>
-                    </Stack>
-                  </Box>
-                );
-              }
-            })}
-        </Box>
-        <Box
-          display={"flex"}
-          flexDirection={"row"}
-          sx={{ borderRadius: { xs: "none", md: "0px 0px 7px 7px" } }}
-          bgcolor={theme.palette.chat.navBar}
-          height={"12vh"}
-        >
-          <Input
-            multiline={true}
-            sx={{
-              overflow: "auto",
-              padding: "0 5px 0 20px",
-              margin: "1px",
-              width: "90%",
-              textAlign: message == "" ? "left" : message[0].charCodeAt() < 1488 ? "left" : "right",
-              direction: message == "" ? "ltr" : message[0].charCodeAt() < 1488 ? "ltr" : "rtl",
-              "&::-webkit-scrollbar": { width: "5px" },
-            }}
+        {messageReceived
+          .filter((object) =>
+            props.messageTo === ""
+              ? object.room === props.room && object.typeMessage === "public"
+              : object.typeMessage === "privte" && (object.to === props.messageTo || object.aouterID === props.messageTo)
+          )
+          .map((message_content, index) => {
+            if (message_content.aouter === username) {
+              message_content.loc = scrollTo;
 
-            disableUnderline={true}
-            placeholder="message"
-            inputProps={{ style: { color: "#ffffff" } }}
-            value={message}
-            onChange={(Event) => {
-              setMessage(Event.target.value);
-            }}
-            onKeyDown={(Event) => {
-              if (Event.key === "Enter") {
-                Event.preventDefault();
-                sendMessage(Event);
-              }
-            }}
-          />
-          <Button
-            sx={{ color: "#ffffff" }}
-            onClick={sendMessage}
-            endIcon={<Send />}
-          />
-        </Box>
+              return (
+                <Box
+                  onClick={() => {
+                    setWriteName(message_content), setReplyFlag(true);
+                  }}
+                  key={index}
+                  display="flex"
+                  justifyContent="right"
+                  margin={"10px 10px 10px 70px"}
+                >
+                  <Stack
+                    border={"2px gray solid"}
+                    borderRadius={"10px 20px 0px 20px "}
+                  >
+                    <Box
+                      display={"flex"}
+                      flexDirection={"row"}
+                      justifyContent={"space-between"}
+                      fontSize="10px"
+                      padding="3px 15px 3px 3px"
+                      sx={{ bgcolor: "blue", width: "100%" }}
+                      borderBottom={"2px gray solid"}
+                      borderRadius={"8px 17px 0px 0px"}
+                    >
+                      <Box padding={"0px 25px 0px 0px"}>{"Me"}</Box>
+                      <Box>{message_content.time}</Box>
+                    </Box>
+                    {message_content.reply !== null ? (
+                      <Tooltip
+                        placement="left-start"
+                        title={message_content.reply.message}
+                      >
+                        <Box
+                          fontSize="10px"
+                          id="reply"
+                          padding="2px 10px"
+                          color={"#FFFFFF"}
+                          bgcolor={"#000000"}
+                          borderBottom={"1px gray solid"}
+                        >
+                          reply to {message_content.reply.aouter}
+                        </Box>
+                      </Tooltip>
+                    ) : (
+                      <></>
+                    )}
+                    <Box
+                      id="content"
+                      padding="2px 10px"
+                      color={"#000000"}
+                      bgcolor={"#ffffff"}
+                      borderRadius={"0px 0px 0px 18px"}
+                      sx={{
+                        textAlign: message_content.message[0].charCodeAt() >= 1488 ? "right" : "left",
+                        direction: message_content.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
+                      }}
+                    >
+                      {message_content.message}
+                    </Box>
+                  </Stack>
+                </Box>
+              );
+            } else {
+              return (
+                <Box
+                  key={index}
+                  onClick={() => {
+                    setWriteName(message_content), setReplyFlag(true);
+                  }}
+                  display="flex"
+                  margin={"10px 70px 10px 10px"}
+                >
+                  <Stack
+                    border={"2px gray solid"}
+                    borderRadius={"15px 7px 15px 0px"}
+                  >
+                    <Box
+                      display={"flex"}
+                      flexDirection={"row"}
+                      justifyContent={"space-between"}
+                      fontSize="10px"
+                      padding="5px"
+                      sx={{
+                        bgcolor: "purple",
+                        width: "100%",
+                        borderRadius: "13px 5px 0px 0px",
+                      }}
+                      borderBottom={"2px gray solid"}
+                    >
+                      <Box padding={"0px 25px 0px 0px"}>
+                        {message_content.aouter}
+                      </Box>
+                      <Box>{message_content.time}</Box>
+                    </Box>
+                    {message_content.reply !== null ? (
+                      <Tooltip
+                        placement="right-start"
+                        title={message_content.reply.message}
+                      >
+                        <Box
+                          fontSize="10px"
+                          id="reply"
+                          padding="2px 10px"
+                          color={"#FFFFFF"}
+                          bgcolor={"#000000"}
+                          borderBottom={"1px gray solid"}
+                        >
+                          reply to {message_content.reply.aouter}
+                        </Box>
+                      </Tooltip>
+                    ) : (
+                      <></>
+                    )}
+                    <Box
+                      padding={"0px 5px 0px 10px"}
+                      display={"flex"}
+                      color={"black"}
+                      bgcolor={"#ffffff"}
+                      borderRadius={"0px 0px 13px 0px"}
+                      sx={{
+                        textAlign: message_content.message[0].charCodeAt() >= 1488 ? "right" : "left",
+                        direction: message_content.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
+                      }}
+                    >
+                      {message_content.message}
+                    </Box>
+                  </Stack>
+                </Box>
+              );
+            }
+          })}
       </Box>
+      <Box
+        display={"flex"}
+        flexDirection={"row"}
+        sx={{ borderRadius: { xs: "none", md: "0px 0px 7px 7px" } }}
+        bgcolor={theme.palette.chat.navBar}
+        height={"12vh"}
+      >
+        <Input
+          multiline={true}
+          sx={{
+            overflow: "auto",
+            padding: "0 5px 0 20px",
+            margin: "1px",
+            width: "90%",
+            textAlign: message == "" ? "left" : message[0].charCodeAt() < 1488 ? "left" : "right",
+            direction: message == "" ? "ltr" : message[0].charCodeAt() < 1488 ? "ltr" : "rtl",
+            "&::-webkit-scrollbar": { width: "5px" },
+          }}
+
+          disableUnderline={true}
+          placeholder="message"
+          inputProps={{ style: { color: "#ffffff" } }}
+          value={message}
+          onChange={(Event) => {
+            setMessage(Event.target.value);
+          }}
+          onKeyDown={(Event) => {
+            if (Event.key === "Enter") {
+              Event.preventDefault();
+              sendMessage(Event);
+            }
+          }}
+        />
+        <Button
+          sx={{ color: "#ffffff" }}
+          onClick={sendMessage}
+          endIcon={<Send />}
+        />
+      </Box>
+    </Box>
   );
 }
