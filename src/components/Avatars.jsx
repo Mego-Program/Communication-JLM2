@@ -37,16 +37,21 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-
 export function ReAvatar(props) {
-  return <StyledBadge
+  let statusUser;
+  let img;
+  props.users.forEach(element => {if(element.userName === props.user){statusUser=element.status, img=element.img}});
+  return <Box><StyledBadge
     sx={{ margin: '2px', padding: '2px' }}
     overlap="circular"
     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-    variant={true ? "dot" : "standart"}
+    variant={statusUser === "connect" ? "dot" : "standart"}
   >
-    <Avatar />
-  </StyledBadge>;
+    <Avatar 
+      src={img}
+      sx={{ marginLeft: "2vh", border:"2px gold solid", }}
+    />
+  </StyledBadge></Box>;
 }
 
 export default function ImageAvatars(props) {
@@ -85,9 +90,10 @@ export default function ImageAvatars(props) {
           sx={{height:"100%", width: "100%", borderBottom: "1px gold solid", color:object.userName === props.signMessageTo ?"tomato": "gold" }}
         >
           <Tooltip title={object.userName}>
+            <Box>
             <StyledBadge
               username={object.userName}
-              sx={{ width: "100%", justifyContent: "right", fontSize: "75%", overflow: "hidden", textAlign: "center", textJustify: "auto", alignItems: "center", height: "56px" }}
+              sx={{  margin: '2px', padding: '2px',width: "100%", justifyContent: "right", fontSize: "75%", overflow: "hidden", textAlign: "center", textJustify: "auto", alignItems: "center", height: "56px" }}
               onClick={() => props.messageTo(object)}
               overlap="circular"
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -97,7 +103,8 @@ export default function ImageAvatars(props) {
                 src={object.img}
                 sx={{ marginLeft: "2vh", border:object.userName === props.signMessageTo ? "2px tomato solid" : "2px gold solid", bgcolor: object.userName === props.signMessageTo ? "tomato" : "block" }}>
               </Avatar>
-            </StyledBadge>
+              
+            </StyledBadge></Box>
           </Tooltip>
         </Box>
       ))}
