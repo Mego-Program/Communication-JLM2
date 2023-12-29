@@ -1,9 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Input, Button, Box, Stack, Tooltip } from "@mui/material";
+import { Input, Button, Box, Stack, } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import theme from "./theme";
 import { animateScroll } from "react-scroll";
+import { ReAvatar } from "./Avatars";
 
 function scrollToBottom() {
   animateScroll.scrollToBottom({
@@ -26,7 +27,7 @@ export default function ChatBody(props) {
   const socket = props.socket;
   const username = props.username;
   const localStorageForMe = props.localStorageForMe
-
+  const users = props.users
 
   const socketWasCalled = React.useRef(false);
 
@@ -45,12 +46,12 @@ export default function ChatBody(props) {
         room: props.messageTo === "" ? props.room : "",
         aouter: username,
         message: message,
-        time: new Date().toLocaleTimeString(),
+        time: new Date(),
         reply: replyFlag ? writeName : null,
       };
-      setReplyFlag(false);
       await socket.emit("send_message", messageData);
       setMessage("");
+      setReplyFlag(false)
     }
   };
 
@@ -122,6 +123,7 @@ export default function ChatBody(props) {
               message_content.loc = scrollTo;
 
               return (
+
                 <Box
                   onClick={() => {
                     setWriteName(message_content), setReplyFlag(true);
@@ -131,7 +133,7 @@ export default function ChatBody(props) {
                   justifyContent="right"
                   margin={"10px 10px 10px 70px"}
                 >
-                  <Stack
+                  <Box
                     border={"2px gray solid"}
                     borderRadius={"10px 20px 0px 20px "}
                   >
@@ -146,10 +148,12 @@ export default function ChatBody(props) {
                       borderRadius={"8px 17px 0px 0px"}
                     >
                       <Box padding={"0px 25px 0px 0px"}>{"Me"}</Box>
-                      <Box>{message_content.time}</Box>
+                      <Box>{new Date(message_content.time).toLocaleDateString() === new Date().toLocaleDateString()
+                        ? new Date(message_content.time).toLocaleTimeString()
+                        : new Date(message_content.time).toLocaleDateString()}</Box>
                     </Box>
                     {message_content.reply !== null ? (
-                      <Tooltip
+                      <Box
                         placement="left-start"
                         title={message_content.reply.message}
                       >
@@ -163,7 +167,22 @@ export default function ChatBody(props) {
                         >
                           reply to {message_content.reply.aouter}
                         </Box>
-                      </Tooltip>
+                        <Box
+                          sx={{
+                            fontSize: "10px",
+                            id: "reply",
+                            padding: "2px 10px",
+                            color: "#FFFFFF",
+                            bgcolor: "#21213E",
+                            borderBottom: "1px gray solid",
+                            textAlign: message_content.reply.message[0].charCodeAt() >= 1488 ? "right" : "left",
+                            direction: message_content.reply.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
+                          }}
+                        >
+                          {message_content.reply.message}
+
+                        </Box>
+                      </Box>
                     ) : (
                       <></>
                     )}
@@ -180,7 +199,8 @@ export default function ChatBody(props) {
                     >
                       {message_content.message}
                     </Box>
-                  </Stack>
+                  </Box>
+                  <ReAvatar user={localStorageForMe.userName} users={users} />
                 </Box>
               );
             } else {
@@ -193,7 +213,9 @@ export default function ChatBody(props) {
                   display="flex"
                   margin={"10px 70px 10px 10px"}
                 >
-                  <Stack
+
+                  <ReAvatar user={message_content.aouter} users={users} />
+                  <Box
                     border={"2px gray solid"}
                     borderRadius={"15px 7px 15px 0px"}
                   >
@@ -213,12 +235,13 @@ export default function ChatBody(props) {
                       <Box padding={"0px 25px 0px 0px"}>
                         {message_content.aouter}
                       </Box>
-                      <Box>{message_content.time}</Box>
+                      <Box>{new Date(message_content.time).toLocaleDateString() === new Date().toLocaleDateString()
+                        ? new Date(message_content.time).toLocaleTimeString()
+                        : new Date(message_content.time).toLocaleDateString()}</Box>
                     </Box>
                     {message_content.reply !== null ? (
-                      <Tooltip
-                        placement="right-start"
-                        title={message_content.reply.message}
+                      <Box
+
                       >
                         <Box
                           fontSize="10px"
@@ -226,11 +249,26 @@ export default function ChatBody(props) {
                           padding="2px 10px"
                           color={"#FFFFFF"}
                           bgcolor={"#000000"}
-                          borderBottom={"1px gray solid"}
-                        >
+                          borderBottom={"1px gray solid"}>
                           reply to {message_content.reply.aouter}
                         </Box>
-                      </Tooltip>
+                        <Box
+                          sx={{
+                            fontSize: "10px",
+                            id: "reply",
+                            padding: "2px 10px",
+                            color: "#FFFFFF",
+                            bgcolor: "#21213E",
+                            borderBottom: "1px gray solid",
+                            textAlign: message_content.reply.message[0].charCodeAt() >= 1488 ? "right" : "left",
+                            direction: message_content.reply.message[0].charCodeAt() >= 1488 ? "rtl" : "ltr",
+                          }}
+                        >
+                          {message_content.reply.message}
+
+                        </Box>
+
+                      </Box>
                     ) : (
                       <></>
                     )}
@@ -247,7 +285,7 @@ export default function ChatBody(props) {
                     >
                       {message_content.message}
                     </Box>
-                  </Stack>
+                  </Box>
                 </Box>
               );
             }

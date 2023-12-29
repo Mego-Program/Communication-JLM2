@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === "production") {
   socket = io.connect("https://jlm-com-server-2.onrender.com/");
   localStorageForMe = JSON.parse(localStorage.getItem("userDetails"));
 } else {
-  socket = io.connect("http://localhost:3001");
+  socket = io.connect("https://jlm-com-server-2.onrender.com/");//socket = io.connect("http://localhost:3001");
   localStorageForMe = {
     _id: "6582effe8cbc3c4e7dc544bb",
     firstName: "nissim",
@@ -60,7 +60,7 @@ export default function Chat() {
     };
   }, [socket]);
 
-  const [room, setRoom] = useState("main room");
+  const [room, setRoom] = useState("");
   const [statusRoom, setStatusRoom] = useState("open");
   const username = localStorageForMe.userName;
 
