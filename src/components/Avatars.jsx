@@ -4,9 +4,6 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import { Box } from "@mui/material";
-import Tooltip from '@mui/material/Tooltip';
-
-
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -40,16 +37,16 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export function ReAvatar(props) {
   let statusUser;
   let img;
-  props.users.forEach(element => {if(element.userName === props.user){statusUser=element.status, img=element.img}});
+  props.users.forEach(element => { if (element.userName === props.user) { statusUser = element.status, img = element.img } });
   return <Box><StyledBadge
     sx={{ margin: '2px', padding: '2px' }}
     overlap="circular"
     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     variant={statusUser === "connect" ? "dot" : "standart"}
   >
-    <Avatar 
+    <Avatar
       src={img}
-      sx={{ marginLeft: "2vh", border:"2px gold solid", }}
+      sx={{ marginLeft: "2vh", border: "2px gold solid", }}
     />
   </StyledBadge></Box>;
 }
@@ -64,8 +61,8 @@ export default function ImageAvatars(props) {
       flexDirection={"column"}
       alignItems={"end"}
       sx={{
-        width:"100%",
-        height:"100%",
+        width: "100%",
+        height: "100%",
         color: "#ffffff",
         display: "flex",
         overflow: "auto",
@@ -87,26 +84,35 @@ export default function ImageAvatars(props) {
       {props.users.filter((object) => object.userName !== props.username).map((object, index) => (
         <Box
           key={index}
-          sx={{height:"100%", width: "100%", borderBottom: "1px gold solid", color:object.userName === props.signMessageTo ?"tomato": "gold" }}
-        >
-          <Tooltip title={object.userName}>
-            <Box>
-            <StyledBadge
-              username={object.userName}
-              sx={{  margin: '2px', padding: '2px',width: "100%", justifyContent: "right", fontSize: "75%", overflow: "hidden", textAlign: "center", textJustify: "auto", alignItems: "center", height: "56px" }}
-              onClick={() => props.messageTo(object)}
-              overlap="circular"
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              variant={object.status === "connect" ? "dot" : "standart"}
-            >{object.firstName} {object.lastName}
-              <Avatar 
-                src={object.img}
-                sx={{ marginLeft: "2vh", border:object.userName === props.signMessageTo ? "2px tomato solid" : "2px gold solid", bgcolor: object.userName === props.signMessageTo ? "tomato" : "block" }}>
-              </Avatar>
-              
-            </StyledBadge></Box>
-          </Tooltip>
+          sx={{
+            padding:"0.75vh",
+            width: "100%",
+            borderBottom: "1px gold solid",
+            color: object.userName === props.signMessageTo ? "tomato" : "gold",
+            fontSize: "75%",
+            textAlign: "right",
+            alignItems:"center",
+            justifyContent:"center",
+            justifyItems:"center",
+            justifyTracks:"center",
+            justifySelf:"center",
+            textJustify:"-moz-initial"
+          }} onClick={() => props.messageTo(object)}
+        >{object.firstName} {object.lastName}
+          <StyledBadge
+            username={object.userName}
+            sx={{ margin: '2px', padding: '2px' }}
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            variant={object.status === "connect" ? "dot" : "standart"}
+          >
+            <Avatar
+              src={object.img}
+              sx={{ marginLeft: "2vh", border: object.userName === props.signMessageTo ? "2px tomato solid" : "2px gold solid", bgcolor: object.userName === props.signMessageTo ? "tomato" : "block" }}
+            />
+          </StyledBadge>
         </Box>
+
       ))}
     </Stack>
   );
